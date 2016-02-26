@@ -49,7 +49,7 @@ public final class Main extends JavaPlugin implements Plugin {
 
     public static Main plugin;
     public static Logger logger;
-    public static final int buildVersion = 13;
+    public static final int buildVersion = 14;
     
     protected static ProtocolManager pm;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
@@ -159,14 +159,14 @@ public final class Main extends JavaPlugin implements Plugin {
             logger.info("├您在配置文件里禁止了自动更新,那记得经常去发布贴检查有没有新版本哦~");
         }
         try {
-            if (config.useBungeeCord) {
+            if (config.useBungeeCord || config.useRedisBungee) {
                 logger.log(Level.INFO, "├尝试建立与Bungee的连接...");
                 new BungeeChannel(this);
             }
         } catch (Throwable t) {
             logger.log(Level.SEVERE, "└连接Bungee失败!无法获取Bungee服务器真实在线人数");
             t.printStackTrace();
-            config.useBungeeCord = false;
+            config.useBungeeCord = config.useRedisBungee = false;
         } finally {
             CommandHandler commandExecutor = new CommandHandler(this);
             Bukkit.getPluginCommand("cmotdr").setExecutor(commandExecutor);

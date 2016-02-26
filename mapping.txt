@@ -195,12 +195,13 @@ net.andylizi.colormotd.utils.AttributionUtil$TAOBAO -> net.andylizi.colormotd.ut
 net.andylizi.colormotd.utils.BungeeChannel -> net.andylizi.colormotd.utils.ê§:
     net.andylizi.colormotd.utils.BungeeChannel instance -> ê§
     int online -> é
-    38:45:void <init>(org.bukkit.plugin.Plugin) -> <init>
-    47:47:net.andylizi.colormotd.utils.BungeeChannel getInstance() -> é
-    51:69:void onPluginMessageReceived(java.lang.String,org.bukkit.entity.Player,byte[]) -> onPluginMessageReceived
-    71:84:void askPlayerCount(java.lang.String) -> é
-    87:88:void run() -> run
-    36:36:void <clinit>() -> <clinit>
+    boolean state -> é€
+    40:47:void <init>(org.bukkit.plugin.Plugin) -> <init>
+    50:50:net.andylizi.colormotd.utils.BungeeChannel getInstance() -> é
+    55:73:void onPluginMessageReceived(java.lang.String,org.bukkit.entity.Player,byte[]) -> onPluginMessageReceived
+    76:94:void askPlayerCount(java.lang.String) -> é
+    98:99:void run() -> run
+    37:38:void <clinit>() -> <clinit>
 net.andylizi.colormotd.utils.EssentialsHook -> net.andylizi.colormotd.utils.é€:
     net.ess3.api.IEssentials ess -> ê§
     java.lang.reflect.Method getTPS -> é

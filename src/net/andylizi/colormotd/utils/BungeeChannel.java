@@ -32,22 +32,26 @@ import net.andylizi.colormotd.Main;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class BungeeChannel extends BukkitRunnable implements PluginMessageListener {
+
     private static BungeeChannel instance;
     public static int online = 0;
-    
+    private static boolean state = false;
+
     public BungeeChannel(Plugin plugin) {
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "RedisBungee");
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "BungeeCord", this);
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "RedisBungee", this);
-        runTaskTimer(plugin, 10*20L, 10*20L);
+        runTaskTimer(plugin, 3 * 20L, 3 * 20L);
         instance = this;
     }
+
     public static BungeeChannel getInstance() {
         return instance;
     }
+
     @Override
-    public synchronized void onPluginMessageReceived(String channel, Player player,byte[] message) {
+    public synchronized void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!(channel.equals("BungeeCord") || channel.equals("RedisBungee"))) {
             return;
         }
@@ -56,10 +60,10 @@ public final class BungeeChannel extends BukkitRunnable implements PluginMessage
             String subChannel = in.readUTF();
             if (subChannel.equals("PlayerCount")) {
                 String server = in.readUTF();
-                if(!server.equals("ALL")) return;
-                if (in.available() > 0) {
-                    online = in.readInt();
+                if (!server.equals("ALL")) {
+                    return;
                 }
+                online = in.readInt();
             }
         } catch (EOFException e) {
         } catch (IOException e) {
@@ -67,21 +71,28 @@ public final class BungeeChannel extends BukkitRunnable implements PluginMessage
             e.printStackTrace();
         }
     }
-    public synchronized void askPlayerCount(String server){
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("PlayerCount");
-            out.writeUTF(server);
-        } catch (IOException e) {
-            Main.logger.log(Level.SEVERE, "在试图获取Bungee在线人数过程中出现错误:");
-            e.printStackTrace();
-        }
+
+    public synchronized void askPlayerCount(String server) {
         Player[] players = ReflectFactory.getPlayers();
-        if(players.length > 0){
-            players[0].sendPluginMessage(Main.getInstance(),Main.config.useRedisBungee ? "RedisBungee" : "BungeeCord",b.toByteArray());
+        if (players.length > 0) {
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(b);
+            try {
+                out.writeUTF("PlayerCount");
+                out.writeUTF(server);
+            } catch (IOException e) {
+                Main.logger.log(Level.SEVERE, "在试图获取Bungee在线人数过程中出现错误:");
+                e.printStackTrace();
+            }
+            players[0].sendPluginMessage(Main.getInstance(), Main.config.useRedisBungee ? "RedisBungee" : "BungeeCord", b.toByteArray());
+        } else {
+            if (state) {
+                online = 0;
+            }
+            state = !state;
         }
     }
+
     @Override
     public void run() {
         askPlayerCount("ALL");
