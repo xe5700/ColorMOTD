@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 
 import net.andylizi.colormotd.Main;
 import static net.andylizi.colormotd.Main.*;
+import net.andylizi.colormotd.updater.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -74,6 +75,13 @@ public final class CommandHandler extends Object implements CommandExecutor {
                     return true;
                 }
                 Main.updater.run();
+                if(Main.updater.exception != null){
+                    sender.sendMessage(Main.msgPrefix+"§c检查更新出错: "+Main.updater.exception);
+                    if(!Updater.DEBUG){
+                        Main.updater.exception.printStackTrace();
+                    }
+                    Main.updater.exception = null;
+                } 
                 if (updater.newVersion == null) {
                     sender.sendMessage(Main.msgPrefix + "§a您当前已经是最新版本了哦!");
                 }

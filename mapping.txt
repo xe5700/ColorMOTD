@@ -64,8 +64,8 @@ net.andylizi.colormotd.Main$1 -> net.andylizi.colormotd.Main$1:
     180:187:void run() -> run
 net.andylizi.colormotd.commands.CommandHandler -> net.andylizi.colormotd.commands.é:
     net.andylizi.colormotd.Main plugin -> é
-    33:35:void <init>(net.andylizi.colormotd.Main) -> <init>
-    39:125:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
+    34:36:void <init>(net.andylizi.colormotd.Main) -> <init>
+    40:133:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
 net.andylizi.colormotd.listener.JoinListener -> net.andylizi.colormotd.listener.é:
     26:26:void <init>() -> <init>
     29:36:void onJoin(org.bukkit.event.player.PlayerLoginEvent) -> é
@@ -118,23 +118,24 @@ net.andylizi.colormotd.metrics.MetricsLite -> net.andylizi.colormotd.metrics.Met
     523:527:void stopAll() -> stopAll
     102:109:void <clinit>() -> <clinit>
 net.andylizi.colormotd.updater.Updater -> net.andylizi.colormotd.updater.é:
-    java.lang.String fileName -> é€
-    java.lang.String etag -> ê²
+    java.lang.String fileName -> èŸ
+    java.lang.String etag -> éµ
     net.andylizi.colormotd.updater.Updater$NewVersion newVersion -> é
     java.util.Timer countdown -> ê§
-    boolean DEBUG -> èŸ
-    int UPDATER_VERSION -> éµ
-    java.lang.String UPDATE_URL -> è´
-    java.lang.String USER_AGENT -> éš
-    51:62:void <init>(java.lang.String) -> <init>
-    65:141:boolean checkUpdate() -> é
-    147:172:void run() -> run
-    48:48:java.lang.String access$200() -> ê§
+    java.lang.Throwable exception -> é€
+    boolean DEBUG -> ê²
+    int UPDATER_VERSION -> è´
+    java.lang.String UPDATE_URL -> éš
+    java.lang.String USER_AGENT -> è¾
+    51:63:void <init>(java.lang.String) -> <init>
+    66:149:boolean checkUpdate() -> ê§
+    155:180:void run() -> run
+    48:48:java.lang.String access$200() -> é
     48:48:java.lang.String access$300(net.andylizi.colormotd.updater.Updater) -> é
 net.andylizi.colormotd.updater.Updater$1 -> net.andylizi.colormotd.updater.é$1:
     net.andylizi.colormotd.updater.Updater this$0 -> é
-    162:162:void <init>(net.andylizi.colormotd.updater.Updater) -> <init>
-    165:170:void run() -> run
+    170:170:void <init>(net.andylizi.colormotd.updater.Updater) -> <init>
+    173:178:void run() -> run
 net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.updater.é$é:
     long serialVersionUID -> ê§
     java.lang.String version -> é€
@@ -142,18 +143,18 @@ net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.upda
     java.lang.String msg -> èŸ
     java.lang.String download_url -> éµ
     net.andylizi.colormotd.updater.Updater this$0 -> é
-    183:188:void <init>(net.andylizi.colormotd.updater.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
-    193:240:void download() -> é
-    246:246:java.lang.String getVersion() -> ê§
-    253:253:int getBuild() -> é€
-    260:260:java.lang.String getMsg() -> ê²
-    267:267:java.lang.String getDownload_url() -> èŸ
-    272:275:int hashCode() -> hashCode
-    280:293:boolean equals(java.lang.Object) -> equals
-    298:298:java.lang.String toString() -> toString
-    303:303:java.lang.Object clone() -> clone
-    174:174:java.lang.String access$000(net.andylizi.colormotd.updater.Updater$NewVersion) -> é
-    174:174:java.lang.String access$100(net.andylizi.colormotd.updater.Updater$NewVersion) -> ê§
+    191:196:void <init>(net.andylizi.colormotd.updater.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
+    201:248:void download() -> é
+    254:254:java.lang.String getVersion() -> ê§
+    261:261:int getBuild() -> é€
+    268:268:java.lang.String getMsg() -> ê²
+    275:275:java.lang.String getDownload_url() -> èŸ
+    280:283:int hashCode() -> hashCode
+    288:301:boolean equals(java.lang.Object) -> equals
+    306:306:java.lang.String toString() -> toString
+    311:311:java.lang.Object clone() -> clone
+    182:182:java.lang.String access$000(net.andylizi.colormotd.updater.Updater$NewVersion) -> é
+    182:182:java.lang.String access$100(net.andylizi.colormotd.updater.Updater$NewVersion) -> ê§
 net.andylizi.colormotd.utils.AttributionUtil -> net.andylizi.colormotd.utils.é:
     java.util.Map attributionTemp -> é
     org.json.simple.parser.JSONParser paser -> ê§

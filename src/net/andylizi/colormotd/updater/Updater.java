@@ -51,7 +51,8 @@ public final class Updater extends TimerTask {
     private String etag = null;
     public NewVersion newVersion;
     public Timer countdown;
-    private static final boolean DEBUG = false;
+    public Throwable exception;
+    public static final boolean DEBUG = true;
     private static final int UPDATER_VERSION = 1;
     private static final String UPDATE_URL = "http://vcheck.windit.net/mc_plugin/andylizi/colormotd/update.json";
     private static String USER_AGENT;
@@ -61,7 +62,7 @@ public final class Updater extends TimerTask {
         USER_AGENT = plugin.getDescription().getFullName() + "/" + Bukkit.getPort() + "/Updater/" + UPDATER_VERSION;
     }
 
-    public boolean checkUpdate() {
+    private boolean checkUpdate() {
         if (new File(Bukkit.getUpdateFolderFile(), fileName).exists()) {
             cancel();
         }
@@ -114,9 +115,14 @@ public final class Updater extends TimerTask {
             } else {
                 input = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"), 1);
             }
-            String json = input.readLine();
+            
+            StringBuilder builder = new StringBuilder();
+            String buffer = null;
+            while((buffer = input.readLine()) != null){
+                builder.append(buffer).append('\n');
+            }
             try {
-                JSONObject jsonObj = (JSONObject) new JSONParser().parse(json);
+                JSONObject jsonObj = (JSONObject) new JSONParser().parse(builder.toString());
                 int build = ((Number) jsonObj.get("build")).intValue();
                 if (build <= buildVersion) {
                     return false;
@@ -130,6 +136,7 @@ public final class Updater extends TimerTask {
                 if (DEBUG) {
                     ex.printStackTrace();
                 }
+                exception = ex;
                 return false;
             }
         } catch (SocketTimeoutException ex) {
@@ -138,6 +145,7 @@ public final class Updater extends TimerTask {
             if (DEBUG) {
                 ex.printStackTrace();
             }
+            exception = ex;
             return false;
         }
     }
