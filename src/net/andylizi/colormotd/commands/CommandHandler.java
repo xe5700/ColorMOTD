@@ -97,7 +97,7 @@ public final class CommandHandler extends Object implements CommandExecutor {
                 }
                 Main.updater.countdown.cancel();
                 Main.updater.countdown = null;
-                sender.sendMessage(Main.msgPrefix + "§e已取消本次下载,自动更新进程将被停止,在下一次服务器重启之前将不会再检查更新.如要检查更新请使用 /colormotd update");
+                sender.sendMessage(Main.msgPrefix + "§e已取消本次下载,在下一次服务器重启之前将不会再检查更新.如要检查更新请使用 /colormotd update");
                 return true;
             } else if (args[0].equalsIgnoreCase("version")) {
                 sender.sendMessage("§5┌ §a" + Main.getInstance().getDescription().getFullName() + " §9made by andylizi");

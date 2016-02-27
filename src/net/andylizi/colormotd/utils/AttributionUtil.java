@@ -37,7 +37,7 @@ public final class AttributionUtil extends Object {
 
     static {
         attributionTemp = new HashMap<>();
-        new Timer("ColorMOTDAttributionTempResetTimer").schedule(new TimerTask() {
+        new Timer("ColorMOTDAttributionTempResetTimer",true).schedule(new TimerTask() {
             @Override
             public void run() {
                 if (attributionTemp == null) {

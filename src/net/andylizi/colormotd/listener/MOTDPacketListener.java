@@ -56,13 +56,13 @@ public final class MOTDPacketListener extends Object implements PacketListener {
 
         this.sendingWhitelist = ListeningWhitelist.newBuilder()
                 .priority(ListenerPriority.NORMAL)
-                .types(PacketType.Status.Server.OUT_SERVER_INFO)
+                .types(PacketType.Status.Server.OUT_SERVER_INFO)  //监听PacketStatusOutServerInfo包
                 .gamePhase(GamePhase.LOGIN)
                 .options(new ListenerOptions[]{ListenerOptions.ASYNC})
                 .build();
         this.receivingWhitelist = ListeningWhitelist.newBuilder()
                 .priority(ListenerPriority.NORMAL)
-                .types(PacketType.Status.Client.IN_PING)
+                .types(PacketType.Status.Client.IN_PING) //监听PacketStatusInPing包
                 .gamePhase(GamePhase.LOGIN)
                 .options(new ListenerOptions[]{ListenerOptions.ASYNC})
                 .build();
@@ -127,14 +127,6 @@ public final class MOTDPacketListener extends Object implements PacketListener {
     @Override
     public Plugin getPlugin() {
         return plugin;
-    }
-
-    public static <T> List<T> copyIterator(Iterator<T> iter) {
-        List<T> copy = new ArrayList<>();
-        while (iter.hasNext()) {
-            copy.add(iter.next());
-        }
-        return copy;
     }
 
     public void unRegister(Plugin plugin) {

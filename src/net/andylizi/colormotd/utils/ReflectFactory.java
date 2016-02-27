@@ -23,9 +23,6 @@ import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-
-import net.andylizi.colormotd.Main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -33,6 +30,7 @@ import org.bukkit.entity.Player;
 
 public final class ReflectFactory extends Object {
     public static WrappedGameProfile createGameProfile(String name) throws Throwable {
+        //use ProtocolLib
         return new WrappedGameProfile(UUID.nameUUIDFromBytes(name.getBytes("UTF-8")), name);
     }
 
@@ -47,7 +45,6 @@ public final class ReflectFactory extends Object {
         } catch (IndexOutOfBoundsException ex) {
             return new Player[0];
         } catch (ReflectiveOperationException ex) {
-            Main.logger.log(Level.SEVERE, "在试图获取在线玩家列表过程中出现错误:");
             ex.printStackTrace();
         }
         return new Player[0];

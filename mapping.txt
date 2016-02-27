@@ -16,24 +16,27 @@ net.andylizi.colormotd.Config -> net.andylizi.colormotd.é:
     java.lang.String smodeMotd -> ê¹
     java.lang.String smodeKickCause -> è¢
     60:73:void <init>(java.io.File) -> <init>
-    76:132:void loadConfig() -> é
-    135:155:void loadStateFormater() -> ê§
-    158:208:java.util.List loadIcons() -> é€
-    212:213:java.io.File conversion(java.awt.image.BufferedImage,java.io.File) -> é
-    217:225:void configLoadFailed() -> ê²
-    228:241:void releaseFile(java.io.File,java.lang.String) -> é
-    244:267:void reloadConfig() -> éµ
-    270:271:void saveConfig() -> èŸ
+    76:136:void loadConfig() -> é
+    139:159:void loadStateFormater() -> ê§
+    162:213:java.util.List loadIcons() -> é€
+    217:218:java.io.File conversion(java.awt.image.BufferedImage,java.io.File) -> é
+    222:230:void configLoadFailed() -> ê²
+    233:247:void releaseFile(java.io.File,java.lang.String) -> é
+    250:302:void reloadConfig() -> éµ
+    305:306:void saveConfig() -> èŸ
+    309:312:void saveConfig(java.lang.String,java.lang.String) -> é
+    315:330:java.lang.String convert(java.lang.String) -> é
 net.andylizi.colormotd.Config$1 -> net.andylizi.colormotd.é$1:
     net.andylizi.colormotd.Config this$0 -> é
-    166:166:void <init>(net.andylizi.colormotd.Config) -> <init>
-    169:173:boolean accept(java.io.File) -> accept
+    170:170:void <init>(net.andylizi.colormotd.Config) -> <init>
+    173:177:boolean accept(java.io.File) -> accept
 net.andylizi.colormotd.Config$2 -> net.andylizi.colormotd.é$2:
     java.util.TimeZone timeZone -> ê§
     net.andylizi.colormotd.Config this$0 -> é
-    251:252:void <init>(net.andylizi.colormotd.Config) -> <init>
-    256:257:void setAllowUnicode(boolean) -> setAllowUnicode
-    261:262:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
+    276:282:void <init>(net.andylizi.colormotd.Config) -> <init>
+    286:287:void setTimeZone(java.util.TimeZone) -> setTimeZone
+    291:292:void setAllowUnicode(boolean) -> setAllowUnicode
+    296:297:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
 net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
     net.andylizi.colormotd.Main plugin -> é
     java.util.logging.Logger logger -> ê§
@@ -49,19 +52,19 @@ net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
     boolean smode -> ê–
     boolean essentials -> ê¹
     boolean fakePlayersOnline -> è¢
-    69:71:void <init>() -> <init>
-    75:189:void onEnable() -> onEnable
-    194:201:void saveConfig() -> saveConfig
-    204:215:void severe(java.lang.String) -> é
-    218:218:net.andylizi.colormotd.Main getInstance() -> é
-    224:249:void onDisable() -> onDisable
-    252:264:void broadcast(java.lang.String) -> ê§
-    267:275:java.util.Date taskSync(long) -> é
-    64:64:void <clinit>() -> <clinit>
+    67:76:void <init>() -> <init>
+    83:208:void onEnable() -> onEnable
+    213:220:void saveConfig() -> saveConfig
+    223:234:void severe(java.lang.String) -> é
+    237:237:net.andylizi.colormotd.Main getInstance() -> é
+    244:270:void onDisable() -> onDisable
+    273:280:void broadcast(java.lang.String) -> ê§
+    283:291:java.util.Date taskSync(long) -> é
+    62:62:void <clinit>() -> <clinit>
 net.andylizi.colormotd.Main$1 -> net.andylizi.colormotd.Main$1:
     net.andylizi.colormotd.Main this$0 -> é
-    177:177:void <init>(net.andylizi.colormotd.Main) -> <init>
-    180:187:void run() -> run
+    196:196:void <init>(net.andylizi.colormotd.Main) -> <init>
+    199:206:void run() -> run
 net.andylizi.colormotd.commands.CommandHandler -> net.andylizi.colormotd.commands.é:
     net.andylizi.colormotd.Main plugin -> é
     34:36:void <init>(net.andylizi.colormotd.Main) -> <init>
@@ -80,8 +83,7 @@ net.andylizi.colormotd.listener.MOTDPacketListener -> net.andylizi.colormotd.lis
     119:119:com.comphenix.protocol.events.ListeningWhitelist getSendingWhitelist() -> getSendingWhitelist
     124:124:com.comphenix.protocol.events.ListeningWhitelist getReceivingWhitelist() -> getReceivingWhitelist
     129:129:org.bukkit.plugin.Plugin getPlugin() -> getPlugin
-    133:137:java.util.List copyIterator(java.util.Iterator) -> é
-    141:142:void unRegister(org.bukkit.plugin.Plugin) -> é
+    133:134:void unRegister(org.bukkit.plugin.Plugin) -> é
 net.andylizi.colormotd.metrics.MetricsLite -> net.andylizi.colormotd.metrics.MetricsLite:
     int REVISION -> REVISION
     java.lang.String BASE_URL -> BASE_URL
@@ -121,21 +123,21 @@ net.andylizi.colormotd.updater.Updater -> net.andylizi.colormotd.updater.é:
     java.lang.String fileName -> èŸ
     java.lang.String etag -> éµ
     net.andylizi.colormotd.updater.Updater$NewVersion newVersion -> é
-    java.util.Timer countdown -> ê§
+    org.bukkit.scheduler.BukkitTask countdown -> ê§
     java.lang.Throwable exception -> é€
     boolean DEBUG -> ê²
     int UPDATER_VERSION -> è´
     java.lang.String UPDATE_URL -> éš
     java.lang.String USER_AGENT -> è¾
-    51:63:void <init>(java.lang.String) -> <init>
-    66:149:boolean checkUpdate() -> ê§
-    155:180:void run() -> run
-    48:48:java.lang.String access$200() -> é
-    48:48:java.lang.String access$300(net.andylizi.colormotd.updater.Updater) -> é
+    52:64:void <init>(java.lang.String) -> <init>
+    67:150:boolean checkUpdate() -> ê§
+    156:179:void run() -> run
+    49:49:java.lang.String access$200() -> é
+    49:49:java.lang.String access$300(net.andylizi.colormotd.updater.Updater) -> é
 net.andylizi.colormotd.updater.Updater$1 -> net.andylizi.colormotd.updater.é$1:
     net.andylizi.colormotd.updater.Updater this$0 -> é
-    170:170:void <init>(net.andylizi.colormotd.updater.Updater) -> <init>
-    173:178:void run() -> run
+    172:172:void <init>(net.andylizi.colormotd.updater.Updater) -> <init>
+    175:177:void run() -> run
 net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.updater.é$é:
     long serialVersionUID -> ê§
     java.lang.String version -> é€
@@ -143,8 +145,8 @@ net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.upda
     java.lang.String msg -> èŸ
     java.lang.String download_url -> éµ
     net.andylizi.colormotd.updater.Updater this$0 -> é
-    191:196:void <init>(net.andylizi.colormotd.updater.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
-    201:248:void download() -> é
+    190:195:void <init>(net.andylizi.colormotd.updater.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
+    200:248:void download() -> é
     254:254:java.lang.String getVersion() -> ê§
     261:261:int getBuild() -> é€
     268:268:java.lang.String getMsg() -> ê²
@@ -153,8 +155,8 @@ net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.upda
     288:301:boolean equals(java.lang.Object) -> equals
     306:306:java.lang.String toString() -> toString
     311:311:java.lang.Object clone() -> clone
-    182:182:java.lang.String access$000(net.andylizi.colormotd.updater.Updater$NewVersion) -> é
-    182:182:java.lang.String access$100(net.andylizi.colormotd.updater.Updater$NewVersion) -> ê§
+    181:181:java.lang.String access$000(net.andylizi.colormotd.updater.Updater$NewVersion) -> é
+    181:181:java.lang.String access$100(net.andylizi.colormotd.updater.Updater$NewVersion) -> ê§
 net.andylizi.colormotd.utils.AttributionUtil -> net.andylizi.colormotd.utils.é:
     java.util.Map attributionTemp -> é
     org.json.simple.parser.JSONParser paser -> ê§
@@ -219,9 +221,9 @@ net.andylizi.colormotd.utils.FakePlayersOnlineHook -> net.andylizi.colormotd.uti
     57:61:int getOnlinePlayers() -> ê§
     66:70:int getMaxPlayers() -> é€
 net.andylizi.colormotd.utils.ReflectFactory -> net.andylizi.colormotd.utils.èŸ:
-    34:34:void <init>() -> <init>
-    36:36:com.comphenix.protocol.wrappers.WrappedGameProfile createGameProfile(java.lang.String) -> é
-    41:53:org.bukkit.entity.Player[] getPlayers() -> é
+    31:31:void <init>() -> <init>
+    34:34:com.comphenix.protocol.wrappers.WrappedGameProfile createGameProfile(java.lang.String) -> é
+    39:50:org.bukkit.entity.Player[] getPlayers() -> é
 net.andylizi.colormotd.utils.StateFormater -> net.andylizi.colormotd.utils.éµ:
     javax.script.ScriptEngineManager manager -> é
     java.lang.String js -> ê§

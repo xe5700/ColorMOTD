@@ -76,14 +76,16 @@ public final class Config extends Object {
         logger.info("└正在加载配置文件..");
         AttributionUtil.attributionTemp.clear();
         try {
+            String oldConfigStr;
             reloadConfig();
+            oldConfigStr = config.saveToString();
             config.options().header(Main.getInstance().getDescription().getFullName() + " Config\r\nhttp://www.mcbbs.net/thread-448326-1-1.html");
             config.addDefault("Motd", Arrays.asList(new String[]{"&b感谢使用ColorMOTD - 这是第一条默认消息\\n&d现在时间: &e%DATE% %TIME%", "&b欢迎使用ColorMOTD - 这是第二条默认消息\\n&d在线人数: &e%ONLINE%", "&b感谢使用ColorMOTD - 这是第三条默认消息\\n&d您的位置: &e%LOC%&d,服务商: &e%ISP%"}));
             config.addDefault("OnlineMsg", "&a在线人数: &b%ONLINE%&d/&2%MAXPLAYER%");
             config.addDefault("Players", Arrays.asList(new String[]{"&b这里是默认的悬浮文字信息", "&e可以显示多行", "&a支持变量,比如%TIME%"}));
             config.addDefault("ServiceModeMOTD", "&c服务器维护中,请等待维护完成...");
             config.addDefault("ServiceModeKickCause", "&c服务器维护中,请等待维护完成再进入服务器!");
-            config.addDefault("bungeeCord", false);
+            config.addDefault("useBungeeCord", false);
             config.addDefault("redisBungee", false);
             config.addDefault("AttributionServer", "ip138");
             config.addDefault("TPSFormat", "0.0");
@@ -118,10 +120,12 @@ public final class Config extends Object {
 
             config.set("DefenseMode", null);
 
-            config.save(configFile);
+            if (!oldConfigStr.equals(config.saveToString())) {
+                saveConfig();
+            }
         } catch (InvalidConfigurationException ex) {
             Throwable cause = ex;
-            while(cause.getCause() != null){
+            while (cause.getCause() != null) {
                 cause = ex.getCause();
             }
             throw cause;
@@ -179,6 +183,7 @@ public final class Config extends Object {
         })) {
             String fileName = file.getName().toLowerCase();
             BufferedImage image = ImageIO.read(file);
+            if(image == null) continue;
             if (!fileName.endsWith(".png")) {
                 logger.log(Level.WARNING, "    ├图标\"{0}\"格式不正确,正在进行格式转换...", file.getName());
                 File newFile = new File(file.getParentFile(),
@@ -225,24 +230,44 @@ public final class Config extends Object {
     }
 
     public static void releaseFile(File folder, String fileName) throws IOException {
-        InputStream input = Config.class.getResourceAsStream(fileName);
-        if (input == null) {
-            return;
-        }
-        File toFile = new File(folder, new File(fileName).getName());
-        try (BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(toFile))) {
-            byte buffer[] = new byte[1024];
-            int size = 0;
-            while ((size = input.read(buffer)) != -1) {
-                output.write(buffer, 0, size);
-                output.flush();
+        try (InputStream input = Config.class.getResourceAsStream(fileName)) {
+            if (input == null) {
+                return;
+            }
+            File toFile = new File(folder, new File(fileName).getName());
+            try (BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(toFile),1024)) {
+                byte buffer[] = new byte[1024];
+                int size = 0;
+                while ((size = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, size);
+                    output.flush();
+                }
             }
         }
     }
 
-    private void reloadConfig() throws Throwable {
+    private void reloadConfig() throws IOException, InvalidConfigurationException {
         config = new YamlConfiguration();
-        config.load(configFile);
+        if (configFile.exists()) {
+            byte[] data = new byte[128];
+            int size = -1;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try (InputStream in = new FileInputStream(configFile)) {
+                while((size = in.read(data)) != -1){
+                    out.write(data,0,size);
+                }
+                data = out.toByteArray();
+            }
+            String str = new String(data, "UTF-8");
+            if(str.contains(String.valueOf((char)65533))){
+                logger.info("   ├配置文件编码为GBK,尝试转换为UTF-8...");
+                str = new String(data, "GBK");
+                saveConfig(str, "UTF-8");
+            }else{
+                logger.info("   ├配置文件编码为UTF-8...");
+            }
+            config.loadFromString(str);
+        }
         DumperOptions yamlOptions = null;
         try {
             Field f = YamlConfiguration.class.getDeclaredField("yamlOptions");
@@ -251,6 +276,16 @@ public final class Config extends Object {
             yamlOptions = new DumperOptions() {
                 private TimeZone timeZone = TimeZone.getDefault();
 
+                {
+                    setLineBreak(LineBreak.getPlatformLineBreak());
+                    setTimeZone(timeZone);
+                }
+
+                @Override
+                public void setTimeZone(TimeZone timeZone) {
+                    super.setTimeZone(TimeZone.getDefault());
+                }
+
                 @Override
                 public void setAllowUnicode(boolean allowUnicode) {
                     super.setAllowUnicode(false);
@@ -258,7 +293,7 @@ public final class Config extends Object {
 
                 @Override
                 public void setLineBreak(DumperOptions.LineBreak lineBreak) {
-                    super.setLineBreak(DumperOptions.LineBreak.getPlatformLineBreak());
+                    super.setLineBreak(LineBreak.getPlatformLineBreak());
                 }
             };
             f.set(config, yamlOptions);
@@ -267,6 +302,31 @@ public final class Config extends Object {
     }
 
     public void saveConfig() throws IOException {
-        config.save(configFile);
+        saveConfig(config.saveToString(), "UTF-8");
+    }
+
+    public void saveConfig(String content, String contentCharset) throws IOException {
+        try (OutputStream output = new FileOutputStream(configFile)) {
+            output.write(convert(content).getBytes("UTF-8"));
+        }
+    }
+
+    private static String convert(String utfString) {
+        StringBuilder sb = new StringBuilder();
+        char[] chars = utfString.toCharArray();
+        if (chars[0] != '\\') {
+            sb.append(chars[0]);
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '\\' && chars.length - i >= 5 && chars[i + 1] == 'u') {
+                sb.append((char) Integer.parseInt((utfString.substring(i + 2, i + 6)), 16));
+                i += 5;
+            } else {
+                sb.append(chars[i]);
+            }
+        }
+
+        return sb.toString().replace("\\\\n", "\\n");
     }
 }

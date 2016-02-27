@@ -37,10 +37,8 @@ import net.andylizi.colormotd.listener.MOTDPacketListener;
 import net.andylizi.colormotd.commands.CommandHandler;
 import net.andylizi.colormotd.updater.Updater;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -49,8 +47,8 @@ public final class Main extends JavaPlugin implements Plugin {
 
     public static Main plugin;
     public static Logger logger;
-    public static final int buildVersion = 15;
-    
+    public static final int buildVersion = 17;
+
     protected static ProtocolManager pm;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
     public static Config config;
@@ -62,24 +60,35 @@ public final class Main extends JavaPlugin implements Plugin {
     public static FakePlayersOnlineHook fakePlayersOnlineHook;
 
     public static boolean smode = false;
-    
+
     public static boolean essentials;
     public static boolean fakePlayersOnline;
 
-    public Main() {
-        plugin = this;
+    public Main() throws AssertionError{
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if(stackTrace.length < 8){
+            throw new AssertionError();
+        }
+        if(!stackTrace[7].getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")){
+            throw new AssertionError(stackTrace[7].getClassName());
+        }
+        plugin = this;//单例
     }
 
+    /**
+     * 入口方法
+     */
     @Override
     public void onEnable() {
         long startTime = System.currentTimeMillis();
         logger = getLogger();
 
+        //连接ProtocolLib
         Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
         if (protocolLib != null && protocolLib.isEnabled()) {
             protocolLibVersion = protocolLib.getDescription().getVersion();
             logger.log(Level.INFO, "├使用 ProtocolLib {0} 作为前置", protocolLibVersion);
-            
+
             pm = ProtocolLibrary.getProtocolManager();
             MinecraftVersion version = pm.getMinecraftVersion();
             if (version.compareTo(MinecraftVersion.WORLD_UPDATE) < 0) {
@@ -90,6 +99,7 @@ public final class Main extends JavaPlugin implements Plugin {
             return;
         }
 
+        //如果ProtocolLib版本小于3.6.0(有更新器)就关闭其自动更新功能
         try {
             if (Integer.valueOf(protocolLibVersion.replace(".", "")) < 360) {
                 UpdaterInjection.inject(protocolLib);
@@ -100,17 +110,19 @@ public final class Main extends JavaPlugin implements Plugin {
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
 
+        //添加MOTD监听器
         try {
-            logger.info("├正在创建MOTD监听器...");
+            logger.info("├正在注册MOTD监听器...");
             pm.addPacketListener(new MOTDPacketListener(this, pm));
         } catch (Error e) {
-            severe("在试图创建监听器过程中出现严重错误,此插件可能不支持服务器上的ProtocolLib版本("+protocolLibVersion+")!");
+            severe("在试图注册监听器过程中出现严重错误,此插件可能不支持服务器上的ProtocolLib版本(" + protocolLibVersion + ")!");
             e.printStackTrace();
         } catch (Throwable e) {
-            severe("在创建监听器过程中出现严重错误!ProtocolLib版本"+protocolLibVersion);
+            severe("在注册监听器过程中出现严重错误!ProtocolLib版本" + protocolLibVersion);
             e.printStackTrace();
         }
 
+        //加载配置文件
         try {
             config = new Config(getDataFolder());
             config.loadConfig();
@@ -120,14 +132,15 @@ public final class Main extends JavaPlugin implements Plugin {
             config.configLoadFailed();
         }
 
+        //启动MetricsLite
         try {
             new MetricsLite(this).start();
         } catch (Throwable t) {
             logger.log(Level.WARNING, "├启动MetricsLite失败: {0}", t.toString());
         }
 
+        //连接Essentials
         essentials = (Bukkit.getPluginManager().getPlugin("Essentials") != null);
-
         if (essentials) {
             try {
                 essHook = new EssentialsHook();
@@ -140,8 +153,8 @@ public final class Main extends JavaPlugin implements Plugin {
             logger.warning("├找不到Essentials,将无法使用%TPS%变量和%STATE%变量!");
         }
 
+        //连接FakePlayersOnline
         fakePlayersOnline = (Bukkit.getPluginManager().getPlugin("FakePlayersOnline") != null);
-
         if (fakePlayersOnline) {
             try {
                 (fakePlayersOnlineHook = new FakePlayersOnlineHook()).init();
@@ -153,11 +166,14 @@ public final class Main extends JavaPlugin implements Plugin {
             }
         }
 
+        //自动更新器
         if (config.autoUpdate) {
             new Timer("ColorMOTDUpdater", true).scheduleAtFixedRate((updater = new Updater(getFile().getName())), taskSync(10L * 1000L), 60L * 60L * 1000L);
         } else {
             logger.info("├您在配置文件里禁止了自动更新,那记得经常去发布贴检查有没有新版本哦~");
         }
+        
+        //BungeeCord/RedisBungee
         try {
             if (config.useBungeeCord || config.useRedisBungee) {
                 logger.log(Level.INFO, "├尝试建立与Bungee的连接...");
@@ -168,12 +184,15 @@ public final class Main extends JavaPlugin implements Plugin {
             t.printStackTrace();
             config.useBungeeCord = config.useRedisBungee = false;
         } finally {
+            //注册命令
             CommandHandler commandExecutor = new CommandHandler(this);
             Bukkit.getPluginCommand("cmotdr").setExecutor(commandExecutor);
             Bukkit.getPluginCommand("smode").setExecutor(commandExecutor);
             Bukkit.getPluginCommand("colormotd").setExecutor(commandExecutor);
             System.out.println(this.getDescription().getFullName() + "加载完成,用时" + (System.currentTimeMillis() - startTime) + "毫秒");
         }
+        
+        //关闭已知MOTD插件列表中的所有插件
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -191,11 +210,11 @@ public final class Main extends JavaPlugin implements Plugin {
     @Override
     public void saveConfig() {
         try {
-            if(config != null){
+            if (config != null) {
                 config.saveConfig();
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Can not save config");
+            logger.log(Level.SEVERE, "无法保存配置文件");
             ex.printStackTrace();
         }
     }
@@ -221,12 +240,14 @@ public final class Main extends JavaPlugin implements Plugin {
     @Override
     public void onDisable() {
         try {
+            //清空归属地缓存
             AttributionUtil.attributionTemp.clear();
         } catch (Throwable ex) {
             //ignore
         }
 
         try {
+            //停止MetricsLite
             MetricsLite.stopAll();
         } catch (Throwable ex) {
             //ignore
@@ -249,22 +270,17 @@ public final class Main extends JavaPlugin implements Plugin {
     }
 
     public static void broadcast(String msg) {
-        List<CommandSender> senders = new LinkedList<>();
-        senders.add(Bukkit.getConsoleSender());
-        for (Player player : ReflectFactory.getPlayers()) {
-            if (player.isOp() || player.hasPermission("colormotd.update.warning")) {
-                senders.add(player);
-            }
-        }
-        for (CommandSender sender : senders) {
-            for (String str : msg.split("\n")) {
-                sender.sendMessage(msgPrefix + str);
+        String[] msgs = (msg.startsWith("\n") ? msg : msgPrefix+msg).replace("\n", "\n"+msgPrefix).split("\n");
+        Bukkit.getConsoleSender().sendMessage(msgs);
+        for (CommandSender sender : ReflectFactory.getPlayers()) {
+            if (sender.isOp() || sender.hasPermission("colormotd.update.warning")) {
+                sender.sendMessage(msgs);
             }
         }
     }
 
     public static Date taskSync(long interval) {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ROOT);
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ENGLISH);
         final long t = interval;
         long curTime = cal.getTimeInMillis();
         long d = curTime / t;

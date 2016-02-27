@@ -38,7 +38,7 @@ public final class StateFormater extends Object{
         this.js = sb.toString();
         if(manager == null) manager = new ScriptEngineManager();
     }
-    
+
     public String format(double tps) throws ScriptException{
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         if(engine == null){

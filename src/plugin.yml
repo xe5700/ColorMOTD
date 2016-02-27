@@ -1,6 +1,6 @@
 name: ColorMOTD
 main: net.andylizi.colormotd.Main
-version: 1.3.7.2
+version: 1.3.8.1
 depend: [ProtocolLib]
 softdepend: [Essentials]
 author: andylizi
@@ -40,4 +40,3 @@ permissions:
         default: op
     colormotd.update:
         default: op
-

@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.Date;
 
 import java.util.Objects;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
@@ -41,6 +40,8 @@ import net.andylizi.colormotd.Main;
 import static net.andylizi.colormotd.Main.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -50,9 +51,9 @@ public final class Updater extends TimerTask {
     private final String fileName;
     private String etag = null;
     public NewVersion newVersion;
-    public Timer countdown;
+    public BukkitTask countdown;
     public Throwable exception;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     private static final int UPDATER_VERSION = 1;
     private static final String UPDATE_URL = "http://vcheck.windit.net/mc_plugin/andylizi/colormotd/update.json";
     private static String USER_AGENT;
@@ -100,8 +101,8 @@ public final class Updater extends TimerTask {
                 etag = conn.getHeaderField("ETag");
             }
             if (DEBUG) {
-                logger.log(Level.INFO, "ResponseCode: {0}", conn.getResponseCode());
-                logger.log(Level.INFO, "ETag: {0}", etag);
+                logger.log(Level.INFO, "DEBUG ResponseCode: {0}", conn.getResponseCode());
+                logger.log(Level.INFO, "DEBUG ETag: {0}", etag);
             }
             if (conn.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
                 return false;
@@ -119,7 +120,7 @@ public final class Updater extends TimerTask {
             StringBuilder builder = new StringBuilder();
             String buffer = null;
             while((buffer = input.readLine()) != null){
-                builder.append(buffer).append('\n');
+                builder.append(buffer);
             }
             try {
                 JSONObject jsonObj = (JSONObject) new JSONParser().parse(builder.toString());
@@ -165,18 +166,16 @@ public final class Updater extends TimerTask {
                 + "\n§6更新日志:§r"
                 + "\n" + ChatColor.translateAlternateColorCodes('&', newVersion.msg)
                 + "\n§b*************************************************"
-                + "\n§c<警告>将在30秒后自动开始下载更新!\n§c如果不想下载请在30秒之前输入§o§5/colormotd stopupdate§c!");
-        cancel();
-        (countdown = new Timer("UpdaterDownloadCountdown", true)).schedule(new TimerTask() {
+                + "\n§c<警告>将在30秒后自动开始下载更新!"
+                + "\n§c如果不想下载请在30秒内输入§o§5/colormotd stopupdate§c!");
+        //cancel();
+        countdown = new BukkitRunnable() {
             @Override
             public void run() {
-                if (!Main.getInstance().isEnabled()) {
-                    cancel();
-                }
                 broadcast("§e开始自动下载ColorMOTD " + newVersion.version + "...");
                 newVersion.download();
             }
-        }, 30L * 1000L);
+        }.runTaskLaterAsynchronously(plugin, 30L * 20L);
     }
 
     public final class NewVersion implements Cloneable, Serializable {
@@ -220,17 +219,19 @@ public final class Updater extends TimerTask {
                 conn.setConnectTimeout(3000);
 
                 conn.connect();
+                
+                int size = conn.getHeaderFieldInt("Content-Length", -1);
 
                 BufferedInputStream input;
                 if (conn.getContentEncoding() != null && conn.getContentEncoding().contains("gzip")) {
-                    input = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()), 10240);
+                    input = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()), (size == -1 ? 10240 : size));
                 } else {
-                    input = new BufferedInputStream(conn.getInputStream(), 10240);
+                    input = new BufferedInputStream(conn.getInputStream(), (size == -1 ? 10240 : size));
                 }
                 File file = new File(Bukkit.getUpdateFolderFile(), fileName);
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-                broadcast("§e连接成功,总大小" + conn.getContentLength() + "bytes,开始下载...");
+                broadcast("§e连接成功,总大小 " + (size == -1 ? "未知" : size) + "bytes ,开始下载...");
                 try (FileOutputStream output = new FileOutputStream(file, false)) {
                     byte[] buffer = new byte[1024];
                     while (input.read(buffer) != -1) {
@@ -244,7 +245,6 @@ public final class Updater extends TimerTask {
                 ex.printStackTrace();
                 return;
             }
-            cancel();
         }
 
         /**
