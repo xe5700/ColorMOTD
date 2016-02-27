@@ -274,16 +274,8 @@ public final class Config extends Object {
             f.setAccessible(true);
 
             yamlOptions = new DumperOptions() {
-                private TimeZone timeZone = TimeZone.getDefault();
-
                 {
                     setLineBreak(LineBreak.getPlatformLineBreak());
-                    setTimeZone(timeZone);
-                }
-
-                @Override
-                public void setTimeZone(TimeZone timeZone) {
-                    super.setTimeZone(TimeZone.getDefault());
                 }
 
                 @Override

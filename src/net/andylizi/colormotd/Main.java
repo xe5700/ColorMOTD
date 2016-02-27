@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin implements Plugin {
 
     public static Main plugin;
     public static Logger logger;
-    public static final int buildVersion = 17;
+    public static final int buildVersion = 18;
 
     protected static ProtocolManager pm;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";

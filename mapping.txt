@@ -22,21 +22,19 @@ net.andylizi.colormotd.Config -> net.andylizi.colormotd.é:
     217:218:java.io.File conversion(java.awt.image.BufferedImage,java.io.File) -> é
     222:230:void configLoadFailed() -> ê²
     233:247:void releaseFile(java.io.File,java.lang.String) -> é
-    250:302:void reloadConfig() -> éµ
-    305:306:void saveConfig() -> èŸ
-    309:312:void saveConfig(java.lang.String,java.lang.String) -> é
-    315:330:java.lang.String convert(java.lang.String) -> é
+    250:294:void reloadConfig() -> éµ
+    297:298:void saveConfig() -> èŸ
+    301:304:void saveConfig(java.lang.String,java.lang.String) -> é
+    307:322:java.lang.String convert(java.lang.String) -> é
 net.andylizi.colormotd.Config$1 -> net.andylizi.colormotd.é$1:
     net.andylizi.colormotd.Config this$0 -> é
     170:170:void <init>(net.andylizi.colormotd.Config) -> <init>
     173:177:boolean accept(java.io.File) -> accept
 net.andylizi.colormotd.Config$2 -> net.andylizi.colormotd.é$2:
-    java.util.TimeZone timeZone -> ê§
     net.andylizi.colormotd.Config this$0 -> é
-    276:282:void <init>(net.andylizi.colormotd.Config) -> <init>
-    286:287:void setTimeZone(java.util.TimeZone) -> setTimeZone
-    291:292:void setAllowUnicode(boolean) -> setAllowUnicode
-    296:297:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
+    276:279:void <init>(net.andylizi.colormotd.Config) -> <init>
+    283:284:void setAllowUnicode(boolean) -> setAllowUnicode
+    288:289:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
 net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
     net.andylizi.colormotd.Main plugin -> é
     java.util.logging.Logger logger -> ê§
