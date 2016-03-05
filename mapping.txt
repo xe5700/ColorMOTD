@@ -50,23 +50,28 @@ net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
     boolean smode -> ê–
     boolean essentials -> ê¹
     boolean fakePlayersOnline -> è¢
-    67:76:void <init>() -> <init>
-    83:208:void onEnable() -> onEnable
-    213:220:void saveConfig() -> saveConfig
-    223:234:void severe(java.lang.String) -> é
-    237:237:net.andylizi.colormotd.Main getInstance() -> é
-    244:270:void onDisable() -> onDisable
-    273:280:void broadcast(java.lang.String) -> ê§
-    283:291:java.util.Date taskSync(long) -> é
+    67:74:void <init>() -> <init>
+    82:207:void onEnable() -> onEnable
+    212:219:void saveConfig() -> saveConfig
+    222:233:void severe(java.lang.String) -> é
+    236:236:net.andylizi.colormotd.Main getInstance() -> é
+    243:269:void onDisable() -> onDisable
+    272:279:void broadcast(java.lang.String) -> ê§
+    282:290:java.util.Date taskSync(long) -> é
     62:62:void <clinit>() -> <clinit>
 net.andylizi.colormotd.Main$1 -> net.andylizi.colormotd.Main$1:
     net.andylizi.colormotd.Main this$0 -> é
-    196:196:void <init>(net.andylizi.colormotd.Main) -> <init>
-    199:206:void run() -> run
+    195:195:void <init>(net.andylizi.colormotd.Main) -> <init>
+    198:205:void run() -> run
 net.andylizi.colormotd.commands.CommandHandler -> net.andylizi.colormotd.commands.é:
     net.andylizi.colormotd.Main plugin -> é
-    34:36:void <init>(net.andylizi.colormotd.Main) -> <init>
-    40:133:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
+    35:37:void <init>(net.andylizi.colormotd.Main) -> <init>
+    41:140:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
+net.andylizi.colormotd.commands.CommandHandler$1 -> net.andylizi.colormotd.commands.é$1:
+    org.bukkit.command.CommandSender val$sender -> é
+    net.andylizi.colormotd.commands.CommandHandler this$0 -> ê§
+    79:79:void <init>(net.andylizi.colormotd.commands.CommandHandler,org.bukkit.command.CommandSender) -> <init>
+    82:93:void run() -> run
 net.andylizi.colormotd.listener.JoinListener -> net.andylizi.colormotd.listener.é:
     26:26:void <init>() -> <init>
     29:36:void onJoin(org.bukkit.event.player.PlayerLoginEvent) -> é

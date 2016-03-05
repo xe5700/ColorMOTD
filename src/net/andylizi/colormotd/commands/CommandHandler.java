@@ -26,6 +26,7 @@ import static net.andylizi.colormotd.Main.*;
 import net.andylizi.colormotd.updater.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class CommandHandler extends Object implements CommandExecutor {
 
@@ -36,7 +37,7 @@ public final class CommandHandler extends Object implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("cmotdr")) {
             Bukkit.dispatchCommand(sender, "colormotd reload");
             return true;
@@ -74,17 +75,23 @@ public final class CommandHandler extends Object implements CommandExecutor {
                     sender.sendMessage(Main.msgPrefix + "§c你没有权限使用该子命令哦!");
                     return true;
                 }
-                Main.updater.run();
-                if(Main.updater.exception != null){
-                    sender.sendMessage(Main.msgPrefix+"§c检查更新出错: "+Main.updater.exception);
-                    if(!Updater.DEBUG){
-                        Main.updater.exception.printStackTrace();
+                sender.sendMessage(Main.msgPrefix + "§a检查ing...");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Main.updater.run();
+                        if (Main.updater.exception != null) {
+                            sender.sendMessage(Main.msgPrefix + "§c检查更新出错: " + Main.updater.exception);
+                            if (!Updater.DEBUG) {
+                                Main.updater.exception.printStackTrace();
+                            }
+                            Main.updater.exception = null;
+                        }
+                        if (updater.newVersion == null) {
+                            sender.sendMessage(Main.msgPrefix + "§a您当前已经是最新版本了哦!");
+                        }
                     }
-                    Main.updater.exception = null;
-                } 
-                if (updater.newVersion == null) {
-                    sender.sendMessage(Main.msgPrefix + "§a您当前已经是最新版本了哦!");
-                }
+                }.runTaskAsynchronously(plugin);
                 return true;
             } else if (args[0].equalsIgnoreCase("stopupdate")) {
                 if (Main.updater.countdown == null) {

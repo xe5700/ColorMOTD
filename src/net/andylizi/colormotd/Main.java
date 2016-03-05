@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin implements Plugin {
 
     public static Main plugin;
     public static Logger logger;
-    public static final int buildVersion = 18;
+    public static final int buildVersion = 19;
 
     protected static ProtocolManager pm;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
@@ -65,14 +65,13 @@ public final class Main extends JavaPlugin implements Plugin {
     public static boolean fakePlayersOnline;
 
     public Main() throws AssertionError{
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        if(stackTrace.length < 8){
-            throw new AssertionError();
+        for(StackTraceElement t:Thread.currentThread().getStackTrace()){
+            if(t.getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")){
+                plugin = this;//单例
+                return;
+            }
         }
-        if(!stackTrace[7].getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")){
-            throw new AssertionError(stackTrace[7].getClassName());
-        }
-        plugin = this;//单例
+        throw new AssertionError("此类无法被实例化");
     }
 
     /**
