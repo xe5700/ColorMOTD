@@ -1,20 +1,20 @@
-net.andylizi.colormotd.Config -> net.andylizi.colormotd.é:
-    java.io.File dataFolder -> è²
-    java.io.File configFile -> é¯
-    org.bukkit.configuration.file.FileConfiguration config -> é
-    java.util.List motdList -> ê§
-    java.lang.String online -> é€
-    java.util.List playerList -> ê²
-    java.util.List icon -> èŸ
-    com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage smodeIcon -> éµ
-    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer attributionServer -> è´
-    java.text.DecimalFormat decimalFormater -> éš
-    boolean showDelay -> è¾
-    boolean useBungeeCord -> è°
-    boolean useRedisBungee -> ê·
-    boolean autoUpdate -> ê–
-    java.lang.String smodeMotd -> ê¹
-    java.lang.String smodeKickCause -> è¢
+net.andylizi.colormotd.Config -> net.andylizi.colormotd.Config:
+    java.io.File dataFolder -> dataFolder
+    java.io.File configFile -> configFile
+    org.bukkit.configuration.file.FileConfiguration config -> config
+    java.util.List motdList -> motdList
+    java.lang.String online -> online
+    java.util.List playerList -> playerList
+    java.util.List icon -> icon
+    com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage smodeIcon -> smodeIcon
+    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer attributionServer -> attributionServer
+    java.text.DecimalFormat decimalFormater -> decimalFormater
+    boolean showDelay -> showDelay
+    boolean useBungeeCord -> useBungeeCord
+    boolean useRedisBungee -> useRedisBungee
+    boolean autoUpdate -> autoUpdate
+    java.lang.String smodeMotd -> smodeMotd
+    java.lang.String smodeKickCause -> smodeKickCause
     60:73:void <init>(java.io.File) -> <init>
     76:136:void loadConfig() -> é
     139:159:void loadStateFormater() -> ê§
@@ -26,43 +26,43 @@ net.andylizi.colormotd.Config -> net.andylizi.colormotd.é:
     297:298:void saveConfig() -> èŸ
     301:304:void saveConfig(java.lang.String,java.lang.String) -> é
     307:322:java.lang.String convert(java.lang.String) -> é
-net.andylizi.colormotd.Config$1 -> net.andylizi.colormotd.é$1:
+net.andylizi.colormotd.Config$1 -> net.andylizi.colormotd.Config$1:
     net.andylizi.colormotd.Config this$0 -> é
     170:170:void <init>(net.andylizi.colormotd.Config) -> <init>
     173:177:boolean accept(java.io.File) -> accept
-net.andylizi.colormotd.Config$2 -> net.andylizi.colormotd.é$2:
+net.andylizi.colormotd.Config$2 -> net.andylizi.colormotd.Config$2:
     net.andylizi.colormotd.Config this$0 -> é
     276:279:void <init>(net.andylizi.colormotd.Config) -> <init>
     283:284:void setAllowUnicode(boolean) -> setAllowUnicode
     288:289:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
 net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
-    net.andylizi.colormotd.Main plugin -> é
-    java.util.logging.Logger logger -> ê§
-    int buildVersion -> é€
-    com.comphenix.protocol.ProtocolManager pm -> ê²
-    java.lang.String msgPrefix -> èŸ
-    net.andylizi.colormotd.Config config -> éµ
-    java.lang.String protocolLibVersion -> è´
-    net.andylizi.colormotd.utils.StateFormater stateFormater -> éš
-    net.andylizi.colormotd.updater.Updater updater -> è¾
-    net.andylizi.colormotd.utils.EssentialsHook essHook -> è°
-    net.andylizi.colormotd.utils.FakePlayersOnlineHook fakePlayersOnlineHook -> ê·
-    boolean smode -> ê–
-    boolean essentials -> ê¹
-    boolean fakePlayersOnline -> è¢
+    net.andylizi.colormotd.Main plugin -> plugin
+    java.util.logging.Logger logger -> logger
+    int buildVersion -> buildVersion
+    com.comphenix.protocol.ProtocolManager pm -> pm
+    java.lang.String msgPrefix -> msgPrefix
+    net.andylizi.colormotd.Config config -> config
+    java.lang.String protocolLibVersion -> protocolLibVersion
+    net.andylizi.colormotd.utils.StateFormater stateFormater -> stateFormater
+    net.andylizi.colormotd.updater.Updater updater -> updater
+    net.andylizi.colormotd.utils.EssentialsHook essHook -> essHook
+    net.andylizi.colormotd.utils.FakePlayersOnlineHook fakePlayersOnlineHook -> fakePlayersOnlineHook
+    boolean smode -> smode
+    boolean essentials -> essentials
+    boolean fakePlayersOnline -> fakePlayersOnline
     67:74:void <init>() -> <init>
-    82:207:void onEnable() -> onEnable
-    212:219:void saveConfig() -> saveConfig
-    222:233:void severe(java.lang.String) -> é
-    236:236:net.andylizi.colormotd.Main getInstance() -> é
-    243:269:void onDisable() -> onDisable
-    272:279:void broadcast(java.lang.String) -> ê§
-    282:290:java.util.Date taskSync(long) -> é
+    82:206:void onEnable() -> onEnable
+    211:218:void saveConfig() -> saveConfig
+    221:240:void severe(java.lang.String) -> é
+    243:243:net.andylizi.colormotd.Main getInstance() -> é
+    250:276:void onDisable() -> onDisable
+    279:286:void broadcast(java.lang.String) -> ê§
+    289:297:java.util.Date taskSync(long) -> é
     62:62:void <clinit>() -> <clinit>
 net.andylizi.colormotd.Main$1 -> net.andylizi.colormotd.Main$1:
     net.andylizi.colormotd.Main this$0 -> é
-    195:195:void <init>(net.andylizi.colormotd.Main) -> <init>
-    198:205:void run() -> run
+    194:194:void <init>(net.andylizi.colormotd.Main) -> <init>
+    197:204:void run() -> run
 net.andylizi.colormotd.commands.CommandHandler -> net.andylizi.colormotd.commands.é:
     net.andylizi.colormotd.Main plugin -> é
     35:37:void <init>(net.andylizi.colormotd.Main) -> <init>
@@ -234,10 +234,13 @@ net.andylizi.colormotd.utils.StateFormater -> net.andylizi.colormotd.utils.éµ:
     34:40:void <init>(java.io.BufferedReader) -> <init>
     43:51:java.lang.String format(double) -> é
 net.andylizi.colormotd.utils.UpdaterInjection -> net.andylizi.colormotd.utils.è´:
-    22:22:void <init>() -> <init>
-    24:25:void inject(java.lang.Object) -> é
-    27:37:java.lang.Class injectDefaultUpdater(java.lang.Object) -> ê§
-    40:50:void injectStaticUpdater(java.lang.Class) -> é
+    23:65:void <init>() -> <init>
+    26:34:void inject(org.bukkit.plugin.Plugin) -> é
+    39:62:java.lang.Class injectDefaultUpdater(org.bukkit.plugin.Plugin) -> ê§
+net.andylizi.colormotd.utils.UpdaterInjection$v3_4 -> net.andylizi.colormotd.utils.è´$é:
+    65:65:void <init>() -> <init>
+    67:77:void injectStaticUpdater(java.lang.Class) -> ê§
+    65:65:void access$000(java.lang.Class) -> é
 net.andylizi.colormotd.utils.VariableFiller -> net.andylizi.colormotd.utils.éš:
     java.text.SimpleDateFormat DATE_FORMAT -> é
     java.text.SimpleDateFormat TIME_FORMAT -> ê§

@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin implements Plugin {
 
     public static Main plugin;
     public static Logger logger;
-    public static final int buildVersion = 19;
+    public static final int buildVersion = 20;
 
     protected static ProtocolManager pm;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
@@ -64,9 +64,9 @@ public final class Main extends JavaPlugin implements Plugin {
     public static boolean essentials;
     public static boolean fakePlayersOnline;
 
-    public Main() throws AssertionError{
-        for(StackTraceElement t:Thread.currentThread().getStackTrace()){
-            if(t.getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")){
+    public Main() throws AssertionError {
+        for (StackTraceElement t : Thread.currentThread().getStackTrace()) {
+            if (t.getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")) {
                 plugin = this;//单例
                 return;
             }
@@ -94,15 +94,12 @@ public final class Main extends JavaPlugin implements Plugin {
                 severe("此插件最低只能在1.7.2 (World Update)服务器上运行!");
             }
         } else {
-            severe("└无法连接到ProtocolLib\n\t\t请确认您是否安装了ProtocolLib插件作为前置?");
+            severe("无法连接到ProtocolLib\n\t\t请确认您是否安装了ProtocolLib插件作为前置?");
             return;
         }
 
-        //如果ProtocolLib版本小于3.6.0(有更新器)就关闭其自动更新功能
         try {
-            if (Integer.valueOf(protocolLibVersion.replace(".", "")) < 360) {
-                UpdaterInjection.inject(protocolLib);
-            }
+            UpdaterInjection.inject(protocolLib);
         } catch (Throwable ex) {
             //Ignore
         }
@@ -125,8 +122,9 @@ public final class Main extends JavaPlugin implements Plugin {
         try {
             config = new Config(getDataFolder());
             config.loadConfig();
+            logger.info("│├载入成功");
         } catch (Throwable ex) {
-            logger.log(Level.SEVERE, "├在加载配置文件过程中发生严重错误,请检查你的配置文件!!!");
+            logger.log(Level.SEVERE, "│├在加载配置文件过程中发生严重错误,请检查你的配置文件!!!");
             ex.printStackTrace();
             config.configLoadFailed();
         }
@@ -138,28 +136,29 @@ public final class Main extends JavaPlugin implements Plugin {
             logger.log(Level.WARNING, "├启动MetricsLite失败: {0}", t.toString());
         }
 
-        //连接Essentials
         essentials = (Bukkit.getPluginManager().getPlugin("Essentials") != null);
+        fakePlayersOnline = (Bukkit.getPluginManager().getPlugin("FakePlayersOnline") != null);
+        if (essentials || fakePlayersOnline) {
+            logger.info("│├软前置加载...");
+        }
         if (essentials) {
             try {
                 essHook = new EssentialsHook();
-                logger.info("├找到Essentials,建立连接...");
+                logger.info("│├找到Essentials,建立连接...");
             } catch (UnsupportedOperationException ex) {
-                logger.log(Level.SEVERE, "├连接Essentials失败!将无法使用%TPS%变量和%STATE%变量!");
+                logger.log(Level.SEVERE, "││├连接Essentials失败!将无法使用变量%TPS%和%STATE%!");
                 essentials = false;
             }
         } else {
-            logger.warning("├找不到Essentials,将无法使用%TPS%变量和%STATE%变量!");
+            logger.warning("├找不到Essentials,无法使用变量%TPS%和%STATE%!");
         }
 
-        //连接FakePlayersOnline
-        fakePlayersOnline = (Bukkit.getPluginManager().getPlugin("FakePlayersOnline") != null);
         if (fakePlayersOnline) {
             try {
                 (fakePlayersOnlineHook = new FakePlayersOnlineHook()).init();
-                logger.info("├找到FakePlayersOnline,建立连接...");
+                logger.info("│├找到FakePlayersOnline,建立连接...");
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "└连接FakePlayersOnline失败!");
+                logger.log(Level.SEVERE, "││├连接FakePlayersOnline失败!");
                 ex.printStackTrace();
                 fakePlayersOnline = false;
             }
@@ -171,7 +170,7 @@ public final class Main extends JavaPlugin implements Plugin {
         } else {
             logger.info("├您在配置文件里禁止了自动更新,那记得经常去发布贴检查有没有新版本哦~");
         }
-        
+
         //BungeeCord/RedisBungee
         try {
             if (config.useBungeeCord || config.useRedisBungee) {
@@ -179,7 +178,7 @@ public final class Main extends JavaPlugin implements Plugin {
                 new BungeeChannel(this);
             }
         } catch (Throwable t) {
-            logger.log(Level.SEVERE, "└连接Bungee失败!无法获取Bungee服务器真实在线人数");
+            logger.log(Level.SEVERE, "│├连接Bungee失败!无法获取Bungee服务器真实在线人数");
             t.printStackTrace();
             config.useBungeeCord = config.useRedisBungee = false;
         } finally {
@@ -190,7 +189,7 @@ public final class Main extends JavaPlugin implements Plugin {
             Bukkit.getPluginCommand("colormotd").setExecutor(commandExecutor);
             System.out.println(this.getDescription().getFullName() + "加载完成,用时" + (System.currentTimeMillis() - startTime) + "毫秒");
         }
-        
+
         //关闭已知MOTD插件列表中的所有插件
         new BukkitRunnable() {
             @Override
@@ -203,7 +202,7 @@ public final class Main extends JavaPlugin implements Plugin {
                     Bukkit.getPluginManager().disablePlugin(p);
                 }
             }
-        }.runTask(protocolLib);
+        }.runTask(Bukkit.getPluginManager().getPlugin("ProtocolLib"));
     }
 
     @Override
@@ -224,8 +223,16 @@ public final class Main extends JavaPlugin implements Plugin {
         System.err.println(msg);
         System.err.println("\t");
         System.err.println("**********************************************");
-        logger.log(Level.SEVERE, "插件将停止运行");
-        Bukkit.getPluginManager().disablePlugin(plugin);
+        if (plugin != null) {
+            if (plugin.getLogger() != null) {
+                plugin.getLogger().severe("插件将停止运行");
+            } else {
+                System.err.println("[ColorMOTD] 插件将停止运行");
+            }
+            if (plugin.isEnabled()) {
+                Bukkit.getPluginManager().disablePlugin(plugin);
+            }
+        }
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -269,7 +276,7 @@ public final class Main extends JavaPlugin implements Plugin {
     }
 
     public static void broadcast(String msg) {
-        String[] msgs = (msg.startsWith("\n") ? msg : msgPrefix+msg).replace("\n", "\n"+msgPrefix).split("\n");
+        String[] msgs = (msg.startsWith("\n") ? msg : msgPrefix + msg).replace("\n", "\n" + msgPrefix).split("\n");
         Bukkit.getConsoleSender().sendMessage(msgs);
         for (CommandSender sender : ReflectFactory.getPlayers()) {
             if (sender.isOp() || sender.hasPermission("colormotd.update.warning")) {

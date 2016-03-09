@@ -73,7 +73,7 @@ public final class Config extends Object {
     }
 
     public void loadConfig() throws Throwable {
-        logger.info("└正在加载配置文件..");
+        logger.info("│├正在载入配置文件..");
         AttributionUtil.attributionTemp.clear();
         try {
             String oldConfigStr;
@@ -105,13 +105,13 @@ public final class Config extends Object {
             try {
                 attributionServer = AttributionUtil.AttributionServer.valueOf(config.getString("AttributionServer").toUpperCase());
             } catch (IllegalArgumentException ex) {
-                logger.log(Level.WARNING, "├您指定的归属地服务器\"{0}\"不存在,请检查你的配置文件中的\"AttributionServer\"项,可用的值为: {1} 将使用默认值\"IP138\"", new Object[]{config.getString("AttributionServer"), AttributionUtil.AttributionServer.list()});
+                logger.log(Level.WARNING, "│├您指定的归属地服务器\"{0}\"不存在,请检查你的配置文件中的\"AttributionServer\"项,可用的值为: {1} 将使用默认值\"IP138\"", new Object[]{config.getString("AttributionServer"), AttributionUtil.AttributionServer.list()});
                 attributionServer = AttributionUtil.AttributionServer.IP138;
             }
             try {
                 decimalFormater = new DecimalFormat(config.getString("TPSFormat"));
             } catch (IllegalArgumentException ex) {
-                logger.log(Level.WARNING, "├您指定的TPS显示格式\"{0}\"不是一个合法的格式,请检查你的配置文件中的\"TPSFormat\"项.正确的梨子:\"0.00\"代表显示两位小数比如19.73 .将使用默认值\"0.0\"", new Object[]{config.getString("TPSFormat")});
+                logger.log(Level.WARNING, "│├您指定的TPS显示格式\"{0}\"不是一个合法的格式,请检查你的配置文件中的\"TPSFormat\"项.正确的梨子:\"0.00\"代表显示两位小数比如19.73 .将使用默认值\"0.0\"", new Object[]{config.getString("TPSFormat")});
                 decimalFormater = new DecimalFormat("0.0");
             }
             showDelay = config.getBoolean("showDelay");
@@ -146,20 +146,20 @@ public final class Config extends Object {
                     }
                 }
             } catch (IOException ex) {
-                logger.severe("├在加载TPSFormater时出错,请检查\"formater.js\",将无法使用%STATE%标签!");
+                logger.severe("│├在加载TPSFormater时出错,请检查\"formater.js\",将无法使用%STATE%标签!");
                 ex.printStackTrace();
             }
         }
         try {
             Main.stateFormater = new StateFormater(file);
         } catch (IOException ex) {
-            logger.severe("├在加载TPSFormater时出错,请检查\"formater.js\",将无法使用%STATE%标签!");
+            logger.severe("│├在加载TPSFormater时出错,请检查\"formater.js\",将无法使用%STATE%标签!");
             ex.printStackTrace();
         }
     }
 
     public List<WrappedServerPing.CompressedImage> loadIcons() throws IOException {
-        logger.info("   └正在加载图标...");
+        logger.info("│├正在加载图标...");
         List<WrappedServerPing.CompressedImage> iconList = new ArrayList<>();
         if (dataFolder.list().length == 1) {
             releaseFile(dataFolder, "/res/default/1.png");
@@ -185,7 +185,7 @@ public final class Config extends Object {
             BufferedImage image = ImageIO.read(file);
             if(image == null) continue;
             if (!fileName.endsWith(".png")) {
-                logger.log(Level.WARNING, "    ├图标\"{0}\"格式不正确,正在进行格式转换...", file.getName());
+                logger.log(Level.WARNING, "││├图标\"{0}\"格式不正确,正在进行格式转换...", file.getName());
                 File newFile = new File(file.getParentFile(),
                         fileName.replace(".jpg", ".png")
                         .replace(".gif", ".png")
@@ -196,19 +196,19 @@ public final class Config extends Object {
                 fileName = newFile.getName().toLowerCase();
             }
             if (!(image.getWidth() <= 64 && image.getHeight() <= 64)) {
-                logger.log(Level.WARNING, "    ├无法加载\"{0}\",因为服务器图标的尺寸不能大于64*64!", file.getName());
+                logger.log(Level.WARNING, "││├无法加载\"{0}\",因为服务器图标的尺寸不能大于64*64!", file.getName());
                 continue;
             }
             if (fileName.equalsIgnoreCase("serviceModeIcon.png")) {
                 smodeIcon = WrappedServerPing.CompressedImage.fromPng(image);
-                logger.info("    ├成功加载维护模式下的图标");
+                logger.info("││├成功加载维护模式下的图标");
                 continue;
             }
             iconList.add(WrappedServerPing.CompressedImage.fromPng(image));
-            logger.log(Level.INFO, "    ├成功加载图标\"{0}\"", file.getName());
+            logger.log(Level.INFO, "││├成功加载图标\"{0}\"", file.getName());
         }
         if (smodeIcon == null) {
-            logger.info("    ├找不到维护模式下的图标\"serviceModeIcon.png\",将使用正常状态下的图标");
+            logger.info("││├找不到维护模式下的图标\"serviceModeIcon.png\",将使用正常状态下的图标");
         }
         return iconList;
     }
@@ -260,11 +260,11 @@ public final class Config extends Object {
             }
             String str = new String(data, "UTF-8");
             if(str.contains(String.valueOf((char)65533))){
-                logger.info("   ├配置文件编码为GBK,尝试转换为UTF-8...");
+                logger.info("│├配置文件编码为GBK,尝试转换为UTF-8...");
                 str = new String(data, "GBK");
                 saveConfig(str, "UTF-8");
             }else{
-                logger.info("   ├配置文件编码为UTF-8...");
+                logger.info("│├配置文件编码为UTF-8...");
             }
             config.loadFromString(str);
         }
