@@ -1,3 +1,3 @@
 # ColorMOTD
 ---
-http://www.mcbbs.net/thread-448326-1-1.html
+Official Website: [andylizi.net](http://andylizi.net/ColorMOTD/default.html) | [vcheck.windit.net](http://vcheck.windit.net/mc_plugin/andylizi/colormotd/website/default.html)
