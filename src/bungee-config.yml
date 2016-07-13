@@ -1,0 +1,16 @@
+## ColorMOTD Config
+# http://www.mcbbs.net/thread-448326-1-1.html
+Motd:
+    - "&b感谢使用ColorMOTD - 这是第一条默认消息\n&d现在时间: &e%DATE% %TIME%"
+    - "&b欢迎使用ColorMOTD - 这是第二条默认消息\n&d在线人数: &e%ONLINE%"
+    - "&b感谢使用ColorMOTD - 这是第三条默认消息\n&d您的位置: &e%LOC%&d,服务商: &e%ISP%"
+OnlineMsg: "&a在线人数 &6%ONLINE%&7/&6%MAXPLAYER%"
+Players: 
+    - "&b这里是默认的悬浮文字信息"
+    - "&e可以显示多行"
+    - "&a支持变量,比如%TIME%"
+ServiceModeMOTD: "&c服务器维护中,请等待维护完成..."
+ServiceModeKickCause: "&c服务器维护中,请等待维护完成再进入服务器!"
+AttributionServer: taobao
+showDelay: true
+UpdateChecker: true

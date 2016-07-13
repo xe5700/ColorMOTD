@@ -20,20 +20,17 @@ package net.andylizi.colormotd.utils;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.andylizi.colormotd.Main;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public final class AttributionUtil extends Object {
-
     public static Map<String, String> attributionTemp;
     private static JSONParser paser = new JSONParser();
+    public static AttributionServer attributionServer = AttributionServer.TAOBAO;
 
     static {
         attributionTemp = new HashMap<>();
@@ -58,7 +55,7 @@ public final class AttributionUtil extends Object {
             return attributionTemp.get(address);
         }
         String result = null;
-        switch (Main.config.attributionServer) {
+        switch (attributionServer) {
             case TAOBAO: {
                 result = TAOBAO.getResult(address);
                 break;
@@ -68,7 +65,7 @@ public final class AttributionUtil extends Object {
                 break;
             }
             default: {
-                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + Main.config.attributionServer.toString() + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
+                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + attributionServer + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
             }
         }
         if(result != null) attributionTemp.put(address, result);
@@ -76,7 +73,7 @@ public final class AttributionUtil extends Object {
     }
 
     public static String formatLocation(String result) {
-        switch (Main.config.attributionServer) {
+        switch (attributionServer) {
             case TAOBAO: {
                 return TAOBAO.formatLocation(result);
             }
@@ -84,13 +81,13 @@ public final class AttributionUtil extends Object {
                 return IP138.formatLocation(result);
             }
             default: {
-                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + Main.config.attributionServer.toString() + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
+                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + attributionServer + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
             }
         }
     }
 
     public static String formatISP(String result) {
-        switch (Main.config.attributionServer) {
+        switch (attributionServer) {
             case TAOBAO: {
                 return TAOBAO.formatISP(result);
             }
@@ -98,7 +95,7 @@ public final class AttributionUtil extends Object {
                 return IP138.formatISP(result);
             }
             default: {
-                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + Main.config.attributionServer.toString() + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
+                throw new UnsupportedOperationException("未被加入的归属地服务器\"" + attributionServer + "\",如果你看到这条错误信息说明你中大奖了,赶紧反馈作者");
             }
         }
     }
@@ -170,7 +167,7 @@ public final class AttributionUtil extends Object {
                     region = "";
                 }
                 return contry + region + city;
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 return "获取失败";
             }
         }
@@ -181,7 +178,7 @@ public final class AttributionUtil extends Object {
                 paser.reset();
                 JSONObject data = (JSONObject) json.get("data");
                 return (((String)data.get("isp")).isEmpty() ? "未知" : (String)data.get("isp"));
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 return "获取失败";
             }
         }
@@ -195,7 +192,7 @@ public final class AttributionUtil extends Object {
             String urlNameString = url + "?" + param;
             URL realUrl = new URL(urlNameString);
             HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
-            conn.setRequestProperty("User-Agent", Main.getInstance().getDescription().getFullName());
+            conn.setRequestProperty("User-Agent", "ColorMOTD/"+UUID.randomUUID());
             conn.setRequestProperty("Accept-Charset", charset);
             conn.setUseCaches(true);
             conn.setConnectTimeout(2000);

@@ -1,261 +1,655 @@
+net.andylizi.colormotd.ColorMOTD -> net.andylizi.colormotd.ColorMOTD:
+    int buildVersion -> new
+    java.lang.String msgPrefix -> new
+    java.lang.String MCBBS_RELEASE_URL -> I1IIIIIIII
+    net.andylizi.colormotd.utils.BasePlaceholderFiller placeholderFiller -> new
+    net.andylizi.colormotd.Updater updater -> new
+    java.util.logging.Logger logger -> new
+    35:38:void <init>(net.andylizi.colormotd.utils.BasePlaceholderFiller,java.util.logging.Logger) -> <init>
+    41:42:void setLogger(java.util.logging.Logger) -> new
+    45:59:void severe(java.lang.String) -> new
+    void broadcast(java.lang.String) -> I1IIIIIIII
+    64:73:long taskSync(long) -> new
+    void disablePlugin() -> new
 net.andylizi.colormotd.Config -> net.andylizi.colormotd.Config:
+    java.util.logging.Logger logger -> logger
     java.io.File dataFolder -> dataFolder
     java.io.File configFile -> configFile
-    org.bukkit.configuration.file.FileConfiguration config -> config
+    boolean smode -> smode
     java.util.List motdList -> motdList
     java.lang.String online -> online
     java.util.List playerList -> playerList
     java.util.List icon -> icon
-    com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage smodeIcon -> smodeIcon
-    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer attributionServer -> attributionServer
+    java.awt.image.BufferedImage smodeIcon -> smodeIcon
     java.text.DecimalFormat decimalFormater -> decimalFormater
+    net.andylizi.colormotd.utils.StateFormater stateFormater -> stateFormater
     boolean showDelay -> showDelay
     boolean useBungeeCord -> useBungeeCord
     boolean useRedisBungee -> useRedisBungee
-    boolean autoUpdate -> autoUpdate
+    boolean updateChecker -> updateChecker
     java.lang.String smodeMotd -> smodeMotd
     java.lang.String smodeKickCause -> smodeKickCause
-    60:73:void <init>(java.io.File) -> <init>
-    76:136:void loadConfig() -> Èù
-    139:159:void loadStateFormater() -> Íß
-    162:213:java.util.List loadIcons() -> ÈÄ
-    217:218:java.io.File conversion(java.awt.image.BufferedImage,java.io.File) -> Èù
-    222:230:void configLoadFailed() -> Í≤
-    233:247:void releaseFile(java.io.File,java.lang.String) -> Èù
-    250:294:void reloadConfig() -> Èµ
-    297:298:void saveConfig() -> Ëü
-    301:304:void saveConfig(java.lang.String,java.lang.String) -> Èù
-    307:322:java.lang.String convert(java.lang.String) -> Èù
+    38:67:void <init>(java.util.logging.Logger,java.io.File) -> <init>
+    void loadConfig() -> new
+    72:93:void loadStateFormater() -> I1IIIIIIII
+    96:147:java.util.List loadIcons() -> new
+    151:152:java.io.File conversion(java.awt.image.BufferedImage,java.io.File) -> new
+    156:163:void configLoadFailed() -> II1IIIIIII
+    166:168:void releaseFile(java.io.File,java.lang.String,java.lang.String) -> new
+    171:188:java.lang.String readConfigString() -> new
+    void updateSmode(boolean) -> new
+    void saveConfig() -> III1IIIIII
+    196:197:void saveConfig(java.lang.String) -> new
+    200:203:void saveConfig(java.lang.String,java.nio.charset.Charset) -> new
+    206:221:java.lang.String convert(java.lang.String) -> new
 net.andylizi.colormotd.Config$1 -> net.andylizi.colormotd.Config$1:
-    net.andylizi.colormotd.Config this$0 -> Èù
-    170:170:void <init>(net.andylizi.colormotd.Config) -> <init>
-    173:177:boolean accept(java.io.File) -> accept
-net.andylizi.colormotd.Config$2 -> net.andylizi.colormotd.Config$2:
-    net.andylizi.colormotd.Config this$0 -> Èù
-    276:279:void <init>(net.andylizi.colormotd.Config) -> <init>
-    283:284:void setAllowUnicode(boolean) -> setAllowUnicode
-    288:289:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
-net.andylizi.colormotd.Main -> net.andylizi.colormotd.Main:
-    net.andylizi.colormotd.Main plugin -> plugin
-    java.util.logging.Logger logger -> logger
-    int buildVersion -> buildVersion
-    com.comphenix.protocol.ProtocolManager pm -> pm
-    java.lang.String msgPrefix -> msgPrefix
-    net.andylizi.colormotd.Config config -> config
-    java.lang.String protocolLibVersion -> protocolLibVersion
-    net.andylizi.colormotd.utils.StateFormater stateFormater -> stateFormater
-    net.andylizi.colormotd.updater.Updater updater -> updater
-    net.andylizi.colormotd.utils.EssentialsHook essHook -> essHook
-    net.andylizi.colormotd.utils.FakePlayersOnlineHook fakePlayersOnlineHook -> fakePlayersOnlineHook
-    boolean smode -> smode
-    boolean essentials -> essentials
-    boolean fakePlayersOnline -> fakePlayersOnline
-    67:74:void <init>() -> <init>
-    82:206:void onEnable() -> onEnable
-    211:218:void saveConfig() -> saveConfig
-    221:240:void severe(java.lang.String) -> Èù
-    243:243:net.andylizi.colormotd.Main getInstance() -> Èù
-    250:276:void onDisable() -> onDisable
-    279:286:void broadcast(java.lang.String) -> Íß
-    289:297:java.util.Date taskSync(long) -> Èù
-    62:62:void <clinit>() -> <clinit>
-net.andylizi.colormotd.Main$1 -> net.andylizi.colormotd.Main$1:
-    net.andylizi.colormotd.Main this$0 -> Èù
-    194:194:void <init>(net.andylizi.colormotd.Main) -> <init>
-    197:204:void run() -> run
-net.andylizi.colormotd.commands.CommandHandler -> net.andylizi.colormotd.commands.Èù:
-    net.andylizi.colormotd.Main plugin -> Èù
-    35:37:void <init>(net.andylizi.colormotd.Main) -> <init>
-    41:140:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
-net.andylizi.colormotd.commands.CommandHandler$1 -> net.andylizi.colormotd.commands.Èù$1:
-    org.bukkit.command.CommandSender val$sender -> Èù
-    net.andylizi.colormotd.commands.CommandHandler this$0 -> Íß
-    79:79:void <init>(net.andylizi.colormotd.commands.CommandHandler,org.bukkit.command.CommandSender) -> <init>
-    82:93:void run() -> run
-net.andylizi.colormotd.listener.JoinListener -> net.andylizi.colormotd.listener.Èù:
-    26:26:void <init>() -> <init>
-    29:36:void onJoin(org.bukkit.event.player.PlayerLoginEvent) -> Èù
-net.andylizi.colormotd.listener.MOTDPacketListener -> net.andylizi.colormotd.listener.Íß:
-    net.andylizi.colormotd.Main plugin -> Èù
-    com.comphenix.protocol.ProtocolManager pm -> Íß
-    com.comphenix.protocol.events.ListeningWhitelist receivingWhitelist -> ÈÄ
-    com.comphenix.protocol.events.ListeningWhitelist sendingWhitelist -> Í≤
-    53:69:void <init>(net.andylizi.colormotd.Main,com.comphenix.protocol.ProtocolManager) -> <init>
-    73:107:void onPacketSending(com.comphenix.protocol.events.PacketEvent) -> onPacketSending
-    111:115:void onPacketReceiving(com.comphenix.protocol.events.PacketEvent) -> onPacketReceiving
-    119:119:com.comphenix.protocol.events.ListeningWhitelist getSendingWhitelist() -> getSendingWhitelist
-    124:124:com.comphenix.protocol.events.ListeningWhitelist getReceivingWhitelist() -> getReceivingWhitelist
-    129:129:org.bukkit.plugin.Plugin getPlugin() -> getPlugin
-    133:134:void unRegister(org.bukkit.plugin.Plugin) -> Èù
-net.andylizi.colormotd.metrics.MetricsLite -> net.andylizi.colormotd.metrics.MetricsLite:
+    net.andylizi.colormotd.Config this$0 -> new
+    104:104:void <init>(net.andylizi.colormotd.Config) -> <init>
+    107:111:boolean accept(java.io.File) -> accept
+net.andylizi.colormotd.Updater -> net.andylizi.colormotd.new:
+    boolean DEBUG -> new
+    int UPDATER_VERSION -> new
+    java.lang.String UPDATE_URL -> new
+    net.andylizi.colormotd.ColorMOTD colormotd -> new
+    java.io.File file -> new
+    java.util.logging.Logger logger -> new
+    java.lang.String userAgent -> I1IIIIIIII
+    java.lang.String etag -> II1IIIIIII
+    net.andylizi.colormotd.Updater$NewVersion newVersion -> new
+    java.lang.Throwable exception -> new
+    55:64:void <init>(net.andylizi.colormotd.ColorMOTD,java.util.logging.Logger,java.io.File,java.lang.String) -> <init>
+    67:150:boolean checkUpdate() -> new
+    156:167:void run() -> run
+    45:45:java.io.File access$200(net.andylizi.colormotd.Updater) -> new
+    45:45:net.andylizi.colormotd.ColorMOTD access$300(net.andylizi.colormotd.Updater) -> new
+    45:45:java.lang.String access$400(net.andylizi.colormotd.Updater) -> new
+net.andylizi.colormotd.Updater$NewVersion -> net.andylizi.colormotd.new$new:
+    long serialVersionUID -> new
+    java.lang.String version -> new
+    int build -> new
+    java.lang.String msg -> I1IIIIIIII
+    java.lang.String download_url -> II1IIIIIII
+    net.andylizi.colormotd.Updater this$0 -> new
+    178:183:void <init>(net.andylizi.colormotd.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
+    190:241:void download() -> new
+    247:247:java.lang.String getVersion() -> new
+    254:254:int getBuild() -> new
+    261:261:java.lang.String getMsg() -> I1IIIIIIII
+    268:268:java.lang.String getDownload_url() -> II1IIIIIII
+    273:276:int hashCode() -> hashCode
+    281:294:boolean equals(java.lang.Object) -> equals
+    299:299:java.lang.String toString() -> toString
+    304:304:java.lang.Object clone() -> clone
+    169:169:java.lang.String access$000(net.andylizi.colormotd.Updater$NewVersion) -> new
+    169:169:java.lang.String access$100(net.andylizi.colormotd.Updater$NewVersion) -> I1IIIIIIII
+net.andylizi.colormotd.bukkit.BukkitColorMOTD -> net.andylizi.colormotd.bukkit.new:
+    org.bukkit.plugin.Plugin plugin -> new
+    31:33:void <init>(org.bukkit.plugin.Plugin,net.andylizi.colormotd.bukkit.BukkitConfig) -> <init>
+    37:44:void broadcast(java.lang.String) -> I1IIIIIIII
+    48:50:void disablePlugin() -> new
+net.andylizi.colormotd.bukkit.BukkitConfig -> net.andylizi.colormotd.bukkit.abstract:
+    org.bukkit.configuration.file.FileConfiguration config -> new
+    java.util.List compressedIcon -> new
+    com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage compressedSmodeIcon -> new
+    48:49:void <init>(java.util.logging.Logger,java.io.File) -> <init>
+    53:123:void loadConfig() -> new
+    127:133:java.util.List loadIcons() -> new
+    138:139:void saveConfig() -> III1IIIIII
+    142:168:void reloadConfig() -> IIII1IIIII
+    172:173:void updateSmode(boolean) -> new
+net.andylizi.colormotd.bukkit.BukkitConfig$1 -> net.andylizi.colormotd.bukkit.abstract$1:
+    net.andylizi.colormotd.bukkit.BukkitConfig this$0 -> new
+    151:154:void <init>(net.andylizi.colormotd.bukkit.BukkitConfig) -> <init>
+    158:159:void setAllowUnicode(boolean) -> setAllowUnicode
+    163:164:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
+net.andylizi.colormotd.bukkit.BukkitMain -> net.andylizi.colormotd.bukkit.BukkitMain:
+    net.andylizi.colormotd.ColorMOTD colormotd -> new
+    net.andylizi.colormotd.bukkit.BukkitMain plugin -> new
+    java.util.logging.Logger logger -> new
+    com.comphenix.protocol.ProtocolManager pm -> new
+    net.andylizi.colormotd.bukkit.BukkitConfig config -> new
+    java.lang.String protocolLibVersion -> new
+    net.andylizi.colormotd.bukkit.utils.EssentialsHook essHook -> new
+    net.andylizi.colormotd.bukkit.utils.FakePlayersOnlineHook fakePlayersOnlineHook -> new
+    boolean essentials -> new
+    boolean fakePlayersOnline -> I1IIIIIIII
+    60:67:void <init>() -> <init>
+    72:201:void onEnable() -> onEnable
+    206:213:void saveConfig() -> saveConfig
+    219:233:void onDisable() -> onDisable
+net.andylizi.colormotd.bukkit.BukkitMain$1 -> net.andylizi.colormotd.bukkit.BukkitMain$1:
+    net.andylizi.colormotd.bukkit.BukkitMain this$0 -> new
+    109:109:void <init>(net.andylizi.colormotd.bukkit.BukkitMain,java.lang.String) -> <init>
+    112:112:int getValue() -> new
+net.andylizi.colormotd.bukkit.BukkitMain$2 -> net.andylizi.colormotd.bukkit.BukkitMain$2:
+    net.andylizi.colormotd.bukkit.BukkitMain this$0 -> new
+    191:191:void <init>(net.andylizi.colormotd.bukkit.BukkitMain) -> <init>
+    194:199:void run() -> run
+net.andylizi.colormotd.bukkit.CommandHandler -> net.andylizi.colormotd.bukkit.class:
+    net.andylizi.colormotd.bukkit.BukkitMain plugin -> new
+    36:38:void <init>(net.andylizi.colormotd.bukkit.BukkitMain) -> <init>
+    42:127:boolean onCommand(org.bukkit.command.CommandSender,org.bukkit.command.Command,java.lang.String,java.lang.String[]) -> onCommand
+net.andylizi.colormotd.bukkit.CommandHandler$1 -> net.andylizi.colormotd.bukkit.class$1:
+    org.bukkit.command.CommandSender val$sender -> new
+    net.andylizi.colormotd.bukkit.CommandHandler this$0 -> new
+    80:80:void <init>(net.andylizi.colormotd.bukkit.CommandHandler,org.bukkit.command.CommandSender) -> <init>
+    83:94:void run() -> run
+net.andylizi.colormotd.bukkit.listener.JoinListener -> net.andylizi.colormotd.bukkit.listener.new:
+    27:27:void <init>() -> <init>
+    30:37:void onJoin(org.bukkit.event.player.PlayerLoginEvent) -> new
+net.andylizi.colormotd.bukkit.listener.MOTDPacketListener -> net.andylizi.colormotd.bukkit.listener.abstract:
+    net.andylizi.colormotd.bukkit.BukkitMain plugin -> new
+    net.andylizi.colormotd.utils.BasePlaceholderFiller placeholderFiller -> new
+    com.comphenix.protocol.ProtocolManager pm -> new
+    com.comphenix.protocol.events.ListeningWhitelist receivingWhitelist -> new
+    com.comphenix.protocol.events.ListeningWhitelist sendingWhitelist -> I1IIIIIIII
+    com.comphenix.protocol.PacketType PACKET_SERVER_INFO -> new
+    int requestCounter -> new
+    56:85:void <init>(net.andylizi.colormotd.bukkit.BukkitMain,net.andylizi.colormotd.utils.BasePlaceholderFiller,com.comphenix.protocol.ProtocolManager) -> <init>
+    89:122:void onPacketSending(com.comphenix.protocol.events.PacketEvent) -> onPacketSending
+    126:130:void onPacketReceiving(com.comphenix.protocol.events.PacketEvent) -> onPacketReceiving
+    134:134:com.comphenix.protocol.events.ListeningWhitelist getSendingWhitelist() -> getSendingWhitelist
+    139:139:com.comphenix.protocol.events.ListeningWhitelist getReceivingWhitelist() -> getReceivingWhitelist
+    144:144:org.bukkit.plugin.Plugin getPlugin() -> getPlugin
+    148:149:void unRegister(org.bukkit.plugin.Plugin) -> new
+    152:152:com.comphenix.protocol.wrappers.WrappedGameProfile createGameProfile(java.lang.String) -> new
+net.andylizi.colormotd.bukkit.listener.MOTDPacketListener$1 -> net.andylizi.colormotd.bukkit.listener.abstract$1:
+    int i -> new
+    net.andylizi.colormotd.bukkit.BukkitMain val$plugin -> new
+    net.andylizi.colormotd.bukkit.listener.MOTDPacketListener this$0 -> new
+    75:76:void <init>(net.andylizi.colormotd.bukkit.listener.MOTDPacketListener,net.andylizi.colormotd.bukkit.BukkitMain) -> <init>
+    79:83:void run() -> run
+net.andylizi.colormotd.bukkit.metrics.Metrics -> net.andylizi.colormotd.bukkit.metrics.Metrics:
     int REVISION -> REVISION
     java.lang.String BASE_URL -> BASE_URL
     java.lang.String REPORT_URL -> REPORT_URL
     int PING_INTERVAL -> PING_INTERVAL
     org.bukkit.plugin.Plugin plugin -> plugin
+    java.util.Set graphs -> graphs
     org.bukkit.configuration.file.YamlConfiguration configuration -> configuration
     java.io.File configurationFile -> configurationFile
     java.lang.String guid -> guid
     boolean debug -> debug
     java.lang.Object optOutLock -> optOutLock
-    java.util.Timer timer -> timer
-    java.lang.String osname -> osname
-    java.lang.String osarch -> osarch
-    java.lang.String osversion -> osversion
-    java.lang.String java_version -> java_version
-    int coreCount -> coreCount
-    boolean firstPost -> firstPost
-    97:168:void <init>(org.bukkit.plugin.Plugin) -> <init>
-    147:165:boolean start() -> start
-    174:195:void run() -> run
-    203:214:boolean isOptOut() -> isOptOut
-    225:237:void enable() -> enable
-    247:260:void disable() -> disable
-    274:277:java.io.File getConfigFile() -> getConfigFile
-    286:286:int getOnlinePlayers() -> getOnlinePlayers
-    294:379:void postPlugin(boolean) -> postPlugin
-    388:405:byte[] gzip(java.lang.String) -> gzip
-    416:419:boolean isMineshafterPresent() -> isMineshafterPresent
-    432:455:void appendJSONPair(java.lang.StringBuilder,java.lang.String,java.lang.String) -> appendJSONPair
-    464:500:java.lang.String escapeJSON(java.lang.String) -> escapeJSON
-    510:510:java.lang.String urlEncode(java.lang.String) -> urlEncode
-    515:520:void finalize() -> finalize
-    523:527:void stopAll() -> stopAll
-    102:109:void <clinit>() -> <clinit>
-net.andylizi.colormotd.updater.Updater -> net.andylizi.colormotd.updater.Èù:
-    java.lang.String fileName -> Ëü
-    java.lang.String etag -> Èµ
-    net.andylizi.colormotd.updater.Updater$NewVersion newVersion -> Èù
-    org.bukkit.scheduler.BukkitTask countdown -> Íß
-    java.lang.Throwable exception -> ÈÄ
-    boolean DEBUG -> Í≤
-    int UPDATER_VERSION -> Ë¥
-    java.lang.String UPDATE_URL -> Èö
-    java.lang.String USER_AGENT -> Ëæ
-    52:64:void <init>(java.lang.String) -> <init>
-    67:150:boolean checkUpdate() -> Íß
-    156:179:void run() -> run
-    49:49:java.lang.String access$200() -> Èù
-    49:49:java.lang.String access$300(net.andylizi.colormotd.updater.Updater) -> Èù
-net.andylizi.colormotd.updater.Updater$1 -> net.andylizi.colormotd.updater.Èù$1:
-    net.andylizi.colormotd.updater.Updater this$0 -> Èù
-    172:172:void <init>(net.andylizi.colormotd.updater.Updater) -> <init>
-    175:177:void run() -> run
-net.andylizi.colormotd.updater.Updater$NewVersion -> net.andylizi.colormotd.updater.Èù$Èù:
-    long serialVersionUID -> Íß
-    java.lang.String version -> ÈÄ
-    int build -> Í≤
-    java.lang.String msg -> Ëü
-    java.lang.String download_url -> Èµ
-    net.andylizi.colormotd.updater.Updater this$0 -> Èù
-    190:195:void <init>(net.andylizi.colormotd.updater.Updater,java.lang.String,int,java.lang.String,java.lang.String) -> <init>
-    200:248:void download() -> Èù
-    254:254:java.lang.String getVersion() -> Íß
-    261:261:int getBuild() -> ÈÄ
-    268:268:java.lang.String getMsg() -> Í≤
-    275:275:java.lang.String getDownload_url() -> Ëü
-    280:283:int hashCode() -> hashCode
-    288:301:boolean equals(java.lang.Object) -> equals
-    306:306:java.lang.String toString() -> toString
-    311:311:java.lang.Object clone() -> clone
-    181:181:java.lang.String access$000(net.andylizi.colormotd.updater.Updater$NewVersion) -> Èù
-    181:181:java.lang.String access$100(net.andylizi.colormotd.updater.Updater$NewVersion) -> Íß
-net.andylizi.colormotd.utils.AttributionUtil -> net.andylizi.colormotd.utils.Èù:
-    java.util.Map attributionTemp -> Èù
-    org.json.simple.parser.JSONParser paser -> Íß
-    33:222:void <init>() -> <init>
-    52:75:java.lang.String getResult(java.lang.String) -> Èù
-    79:87:java.lang.String formatLocation(java.lang.String) -> Íß
-    93:101:java.lang.String formatISP(java.lang.String) -> ÈÄ
-    192:219:java.lang.String sendGet(java.lang.String,java.lang.String,java.lang.String) -> Íß
-    33:33:java.lang.String access$000(java.lang.String,java.lang.String,java.lang.String) -> Èù
-    33:33:org.json.simple.parser.JSONParser access$100() -> Èù
-    36:49:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.AttributionUtil$1 -> net.andylizi.colormotd.utils.Èù$1:
-    40:40:void <init>() -> <init>
-    43:47:void run() -> run
-net.andylizi.colormotd.utils.AttributionUtil$2 -> net.andylizi.colormotd.utils.Èù$2:
-    int[] $SwitchMap$net$andylizi$colormotd$utils$AttributionUtil$AttributionServer -> Èù
-    61:61:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.AttributionUtil$AttributionServer -> net.andylizi.colormotd.utils.Èù$Èù:
-    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer TAOBAO -> Èù
-    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer IP138 -> Íß
-    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] $VALUES -> ÈÄ
-    222:222:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] values() -> values
-    222:222:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer valueOf(java.lang.String) -> valueOf
-    222:222:void <init>(java.lang.String,int) -> <init>
-    227:232:java.lang.String list() -> Èù
-    222:224:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.AttributionUtil$IP138 -> net.andylizi.colormotd.utils.Èù$Íß:
-    java.lang.String URL -> Èù
-    106:106:void <init>() -> <init>
-    111:117:java.lang.String getResult(java.lang.String) -> Èù
-    122:133:java.lang.String formatLocation(java.lang.String) -> Íß
-    137:141:java.lang.String formatISP(java.lang.String) -> ÈÄ
-net.andylizi.colormotd.utils.AttributionUtil$TAOBAO -> net.andylizi.colormotd.utils.Èù$ÈÄ:
-    java.lang.String URL -> Èù
-    145:145:void <init>() -> <init>
-    150:154:java.lang.String getResult(java.lang.String) -> Èù
-    160:174:java.lang.String formatLocation(java.lang.String) -> Íß
-    180:185:java.lang.String formatISP(java.lang.String) -> ÈÄ
-net.andylizi.colormotd.utils.BungeeChannel -> net.andylizi.colormotd.utils.Íß:
-    net.andylizi.colormotd.utils.BungeeChannel instance -> Íß
-    int online -> Èù
-    boolean state -> ÈÄ
-    40:47:void <init>(org.bukkit.plugin.Plugin) -> <init>
-    50:50:net.andylizi.colormotd.utils.BungeeChannel getInstance() -> Èù
-    55:73:void onPluginMessageReceived(java.lang.String,org.bukkit.entity.Player,byte[]) -> onPluginMessageReceived
-    76:94:void askPlayerCount(java.lang.String) -> Èù
-    98:99:void run() -> run
-    37:38:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.EssentialsHook -> net.andylizi.colormotd.utils.ÈÄ:
-    net.ess3.api.IEssentials ess -> Íß
-    java.lang.reflect.Method getTPS -> Èù
+    org.bukkit.scheduler.BukkitTask task -> task
+    java.lang.reflect.Method onlinePlayerMethod -> onlinePlayerMethod
+    boolean onlinePlayerVersion -> onlinePlayerVersion
+    91:148:void <init>(org.bukkit.plugin.Plugin) -> <init>
+    158:169:net.andylizi.colormotd.bukkit.metrics.Metrics$Graph createGraph(java.lang.String) -> createGraph
+    178:183:void addGraph(net.andylizi.colormotd.bukkit.metrics.Metrics$Graph) -> addGraph
+    193:242:boolean start() -> start
+    251:262:boolean isOptOut() -> isOptOut
+    272:284:void enable() -> enable
+    293:306:void disable() -> disable
+    319:322:java.io.File getConfigFile() -> getConfigFile
+    334:350:int getOnlinePlayers() -> getOnlinePlayers
+    358:512:void postPlugin(boolean) -> postPlugin
+    521:536:byte[] gzip(java.lang.String) -> gzip
+    546:549:boolean isMineshafterPresent() -> isMineshafterPresent
+    562:585:void appendJSONPair(java.lang.StringBuilder,java.lang.String,java.lang.String) -> appendJSONPair
+    594:630:java.lang.String escapeJSON(java.lang.String) -> escapeJSON
+    640:640:java.lang.String urlEncode(java.lang.String) -> urlEncode
+    61:61:java.lang.Object access$100(net.andylizi.colormotd.bukkit.metrics.Metrics) -> access$100
+    61:61:org.bukkit.scheduler.BukkitTask access$200(net.andylizi.colormotd.bukkit.metrics.Metrics) -> access$200
+    61:61:org.bukkit.scheduler.BukkitTask access$202(net.andylizi.colormotd.bukkit.metrics.Metrics,org.bukkit.scheduler.BukkitTask) -> access$202
+    61:61:java.util.Set access$300(net.andylizi.colormotd.bukkit.metrics.Metrics) -> access$300
+    61:61:void access$400(net.andylizi.colormotd.bukkit.metrics.Metrics,boolean) -> access$400
+    61:61:boolean access$500(net.andylizi.colormotd.bukkit.metrics.Metrics) -> access$500
+net.andylizi.colormotd.bukkit.metrics.Metrics$1 -> net.andylizi.colormotd.bukkit.metrics.Metrics$1:
+    boolean firstPost -> new
+    net.andylizi.colormotd.bukkit.metrics.Metrics this$0 -> new
+    205:207:void <init>(net.andylizi.colormotd.bukkit.metrics.Metrics) -> <init>
+    213:238:void run() -> run
+net.andylizi.colormotd.bukkit.metrics.Metrics$Graph -> net.andylizi.colormotd.bukkit.metrics.Metrics$new:
+    java.lang.String name -> new
+    java.util.Set plotters -> new
+    657:661:void <init>(java.lang.String) -> <init>
+    669:669:java.lang.String getName() -> new
+    678:679:void addPlotter(net.andylizi.colormotd.bukkit.metrics.Metrics$Plotter) -> new
+    687:688:void removePlotter(net.andylizi.colormotd.bukkit.metrics.Metrics$Plotter) -> I1IIIIIIII
+    696:696:java.util.Set getPlotters() -> new
+    701:701:int hashCode() -> hashCode
+    706:711:boolean equals(java.lang.Object) -> equals
+    718:718:void onOptOut() -> new
+    646:646:void <init>(java.lang.String,net.andylizi.colormotd.bukkit.metrics.Metrics$1) -> <init>
+net.andylizi.colormotd.bukkit.metrics.Metrics$Plotter -> net.andylizi.colormotd.bukkit.metrics.Metrics$abstract:
+    java.lang.String name -> new
+    735:736:void <init>() -> <init>
+    743:745:void <init>(java.lang.String) -> <init>
+    int getValue() -> new
+    762:762:java.lang.String getColumnName() -> new
+    768:768:void reset() -> new
+    772:772:int hashCode() -> hashCode
+    777:782:boolean equals(java.lang.Object) -> equals
+net.andylizi.colormotd.bukkit.utils.BukkitPlaceholderFiller -> net.andylizi.colormotd.bukkit.utils.new:
+    net.andylizi.colormotd.bukkit.BukkitConfig config -> new
+    int online -> new
+    34:39:void <init>(net.andylizi.colormotd.bukkit.BukkitConfig) -> <init>
+    43:49:java.lang.Object randomIcon() -> new
+    55:98:java.lang.String fill(java.lang.String,java.lang.String) -> new
+    103:104:void reflushTime() -> new
+net.andylizi.colormotd.bukkit.utils.BungeeChannel -> net.andylizi.colormotd.bukkit.utils.abstract:
+    net.andylizi.colormotd.bukkit.utils.BungeeChannel instance -> new
+    boolean state -> new
+    byte[] askAllMsg -> new
+    int online -> new
+    org.bukkit.plugin.Plugin plugin -> new
+    44:52:void <init>(org.bukkit.plugin.Plugin) -> <init>
+    55:55:net.andylizi.colormotd.bukkit.utils.BungeeChannel getInstance() -> new
+    60:78:void onPluginMessageReceived(java.lang.String,org.bukkit.entity.Player,byte[]) -> onPluginMessageReceived
+    81:102:void askPlayerCount() -> new
+    106:107:void run() -> run
+    38:40:void <clinit>() -> <clinit>
+net.andylizi.colormotd.bukkit.utils.EssentialsHook -> net.andylizi.colormotd.bukkit.utils.class:
+    net.ess3.api.IEssentials ess -> new
+    java.lang.reflect.Method getTPS -> new
     25:25:void <init>() -> <init>
-    30:42:boolean init() -> Èù
-    46:47:double getTPS() -> Íß
+    30:42:boolean init() -> new
+    46:47:double getTPS() -> new
     26:26:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.FakePlayersOnlineHook -> net.andylizi.colormotd.utils.Í≤:
-    org.bukkit.plugin.Plugin hookPlugin -> Èù
-    java.lang.reflect.Method getOnlinePlayers -> Íß
-    java.lang.reflect.Method getMaxPlayers -> ÈÄ
+net.andylizi.colormotd.bukkit.utils.FakePlayersOnlineHook -> net.andylizi.colormotd.bukkit.utils.implements:
+    org.bukkit.plugin.Plugin hookPlugin -> new
+    java.lang.reflect.Method getOnlinePlayers -> new
+    java.lang.reflect.Method getMaxPlayers -> I1IIIIIIII
     25:25:void <init>() -> <init>
-    31:52:boolean init() -> Èù
-    57:61:int getOnlinePlayers() -> Íß
-    66:70:int getMaxPlayers() -> ÈÄ
-net.andylizi.colormotd.utils.ReflectFactory -> net.andylizi.colormotd.utils.Ëü:
-    31:31:void <init>() -> <init>
-    34:34:com.comphenix.protocol.wrappers.WrappedGameProfile createGameProfile(java.lang.String) -> Èù
-    39:50:org.bukkit.entity.Player[] getPlayers() -> Èù
-net.andylizi.colormotd.utils.StateFormater -> net.andylizi.colormotd.utils.Èµ:
-    javax.script.ScriptEngineManager manager -> Èù
-    java.lang.String js -> Íß
+    31:44:boolean init() -> new
+    50:54:int getOnlinePlayers() -> new
+    60:64:int getMaxPlayers() -> I1IIIIIIII
+net.andylizi.colormotd.bukkit.utils.ReflectFactory -> net.andylizi.colormotd.bukkit.utils.public:
+    30:30:void <init>() -> <init>
+    33:44:org.bukkit.entity.Player[] getPlayers() -> new
+    49:58:com.comphenix.protocol.PacketType getServerInfoPacketType() -> new
+    65:74:com.comphenix.protocol.PacketType getPingPacketType() -> I1IIIIIIII
+net.andylizi.colormotd.bungee.BungeeColorMOTD -> net.andylizi.colormotd.bungee.new:
+    27:28:void <init>(net.andylizi.colormotd.bungee.BungeeMain,net.andylizi.colormotd.bungee.BungeeConfig) -> <init>
+    33:36:void broadcast(java.lang.String) -> I1IIIIIIII
+    39:39:void disablePlugin() -> new
+net.andylizi.colormotd.bungee.BungeeConfig -> net.andylizi.colormotd.bungee.abstract:
+    net.md_5.bungee.config.ConfigurationProvider provider -> new
+    net.md_5.bungee.config.Configuration config -> new
+    net.md_5.bungee.config.Configuration defaults -> I1IIIIIIII
+    java.util.List favicons -> new
+    net.md_5.bungee.api.Favicon faviconSmode -> new
+    45:67:void <init>(java.util.logging.Logger,java.io.File) -> <init>
+    71:95:void loadConfig() -> new
+    99:105:java.util.List loadIcons() -> new
+    109:116:void reloadConfig() -> IIII1IIIII
+    120:121:void updateSmode(boolean) -> new
+    125:129:void saveConfig() -> III1IIIIII
+net.andylizi.colormotd.bungee.BungeeMain -> net.andylizi.colormotd.bungee.BungeeMain:
+    net.andylizi.colormotd.bungee.BungeeColorMOTD colormotd -> new
+    net.andylizi.colormotd.bungee.BungeeMain plugin -> new
+    java.util.logging.Logger logger -> new
+    net.andylizi.colormotd.bungee.BungeeConfig config -> new
+    41:43:void <init>() -> <init>
+    47:104:void onEnable() -> onEnable
+    109:115:void onDisable() -> onDisable
+net.andylizi.colormotd.bungee.BungeeMain$1 -> net.andylizi.colormotd.bungee.BungeeMain$1:
+    int i -> new
+    net.andylizi.colormotd.bungee.BungeeMain this$0 -> new
+    54:55:void <init>(net.andylizi.colormotd.bungee.BungeeMain) -> <init>
+    58:63:void run() -> run
+net.andylizi.colormotd.bungee.BungeeMain$2 -> net.andylizi.colormotd.bungee.BungeeMain$2:
+    net.andylizi.colormotd.bungee.BungeeMain this$0 -> new
+    90:90:void <init>(net.andylizi.colormotd.bungee.BungeeMain,java.lang.String) -> <init>
+    93:93:int getValue() -> new
+net.andylizi.colormotd.bungee.CommandHandler -> net.andylizi.colormotd.bungee.class:
+    net.andylizi.colormotd.bungee.BungeeMain plugin -> new
+    java.util.logging.Logger logger -> new
+    net.andylizi.colormotd.bungee.BungeeConfig config -> new
+    net.andylizi.colormotd.ColorMOTD colormotd -> new
+    44:49:void <init>(net.andylizi.colormotd.bungee.BungeeMain) -> <init>
+    53:132:void execute(net.md_5.bungee.api.CommandSender,java.lang.String[]) -> execute
+    37:37:net.andylizi.colormotd.ColorMOTD access$000(net.andylizi.colormotd.bungee.CommandHandler) -> new
+net.andylizi.colormotd.bungee.CommandHandler$1 -> net.andylizi.colormotd.bungee.class$1:
+    net.md_5.bungee.api.CommandSender val$sender -> new
+    net.andylizi.colormotd.bungee.CommandHandler this$0 -> new
+    78:78:void <init>(net.andylizi.colormotd.bungee.CommandHandler,net.md_5.bungee.api.CommandSender) -> <init>
+    81:92:void run() -> run
+net.andylizi.colormotd.bungee.listener.JoinListener -> net.andylizi.colormotd.bungee.listener.new:
+    26:26:void <init>() -> <init>
+    29:35:void onJoin(net.md_5.bungee.api.event.PreLoginEvent) -> new
+net.andylizi.colormotd.bungee.listener.MOTDListener -> net.andylizi.colormotd.bungee.listener.abstract:
+    net.md_5.bungee.api.ServerPing$PlayerInfo[] PLAYER_INFO_ARRAY -> new
+    net.andylizi.colormotd.bungee.utils.BungeePlaceholderFiller placeholderFiller -> new
+    int requestCounter -> new
+    46:48:void <init>(net.andylizi.colormotd.bungee.utils.BungeePlaceholderFiller) -> <init>
+    52:74:void onServerListPing(net.md_5.bungee.api.event.ProxyPingEvent) -> new
+    40:40:net.andylizi.colormotd.bungee.utils.BungeePlaceholderFiller access$000(net.andylizi.colormotd.bungee.listener.MOTDListener) -> new
+    41:41:void <clinit>() -> <clinit>
+net.andylizi.colormotd.bungee.listener.MOTDListener$1 -> net.andylizi.colormotd.bungee.listener.abstract$1:
+    java.lang.String val$ip -> new
+    net.md_5.bungee.api.config.ListenerInfo val$listenerInfo -> new
+    net.andylizi.colormotd.bungee.listener.MOTDListener this$0 -> new
+    64:64:void <init>(net.andylizi.colormotd.bungee.listener.MOTDListener,java.lang.String,net.md_5.bungee.api.config.ListenerInfo) -> <init>
+    67:68:net.md_5.bungee.api.ServerPing$PlayerInfo apply(java.lang.String) -> new
+    64:64:java.lang.Object apply(java.lang.Object) -> apply
+net.andylizi.colormotd.bungee.metrics.Metrics -> net.andylizi.colormotd.bungee.metrics.Metrics:
+    int REVISION -> new
+    java.lang.String BASE_URL -> new
+    java.lang.String REPORT_URL -> I1IIIIIIII
+    int PING_INTERVAL -> I1IIIIIIII
+    net.md_5.bungee.api.plugin.Plugin plugin -> new
+    java.util.Set graphs -> new
+    java.util.Properties properties -> new
+    java.io.File configurationFile -> new
+    java.lang.String guid -> II1IIIIIII
+    boolean debug -> new
+    java.lang.Object optOutLock -> new
+    net.md_5.bungee.api.scheduler.ScheduledTask thread -> new
+    88:150:void <init>(net.md_5.bungee.api.plugin.Plugin) -> <init>
+    160:171:net.andylizi.colormotd.bungee.metrics.Metrics$Graph createGraph(java.lang.String) -> new
+    180:185:void addGraph(net.andylizi.colormotd.bungee.metrics.Metrics$Graph) -> new
+    195:258:boolean start() -> new
+    267:279:boolean isOptOut() -> I1IIIIIIII
+    289:301:void enable() -> new
+    310:323:void disable() -> I1IIIIIIII
+    332:332:java.io.File getConfigFile() -> new
+    340:494:void postPlugin(boolean) -> new
+    503:518:byte[] gzip(java.lang.String) -> new
+    528:531:boolean isMineshafterPresent() -> II1IIIIIII
+    544:567:void appendJSONPair(java.lang.StringBuilder,java.lang.String,java.lang.String) -> new
+    576:612:java.lang.String escapeJSON(java.lang.String) -> new
+    622:622:java.lang.String urlEncode(java.lang.String) -> I1IIIIIIII
+    58:58:net.md_5.bungee.api.scheduler.ScheduledTask access$100(net.andylizi.colormotd.bungee.metrics.Metrics) -> new
+    58:58:java.lang.Object access$200(net.andylizi.colormotd.bungee.metrics.Metrics) -> new
+    58:58:net.md_5.bungee.api.scheduler.ScheduledTask access$102(net.andylizi.colormotd.bungee.metrics.Metrics,net.md_5.bungee.api.scheduler.ScheduledTask) -> new
+    58:58:java.util.Set access$300(net.andylizi.colormotd.bungee.metrics.Metrics) -> new
+    58:58:void access$400(net.andylizi.colormotd.bungee.metrics.Metrics,boolean) -> new
+    58:58:boolean access$500(net.andylizi.colormotd.bungee.metrics.Metrics) -> new
+net.andylizi.colormotd.bungee.metrics.Metrics$1 -> net.andylizi.colormotd.bungee.metrics.Metrics$1:
+    boolean firstPost -> new
+    long nextPost -> new
+    net.andylizi.colormotd.bungee.metrics.Metrics this$0 -> new
+    207:211:void <init>(net.andylizi.colormotd.bungee.metrics.Metrics) -> <init>
+    215:254:void run() -> run
+net.andylizi.colormotd.bungee.metrics.Metrics$Graph -> net.andylizi.colormotd.bungee.metrics.Metrics$new:
+    java.lang.String name -> new
+    java.util.Set plotters -> new
+    639:643:void <init>(java.lang.String) -> <init>
+    651:651:java.lang.String getName() -> new
+    660:661:void addPlotter(net.andylizi.colormotd.bungee.metrics.Metrics$Plotter) -> new
+    669:670:void removePlotter(net.andylizi.colormotd.bungee.metrics.Metrics$Plotter) -> I1IIIIIIII
+    678:678:java.util.Set getPlotters() -> new
+    683:683:int hashCode() -> hashCode
+    688:693:boolean equals(java.lang.Object) -> equals
+    700:700:void onOptOut() -> new
+    628:628:void <init>(java.lang.String,net.andylizi.colormotd.bungee.metrics.Metrics$1) -> <init>
+net.andylizi.colormotd.bungee.metrics.Metrics$Plotter -> net.andylizi.colormotd.bungee.metrics.Metrics$abstract:
+    java.lang.String name -> new
+    717:718:void <init>() -> <init>
+    725:727:void <init>(java.lang.String) -> <init>
+    int getValue() -> new
+    744:744:java.lang.String getColumnName() -> new
+    751:751:void reset() -> new
+    755:755:int hashCode() -> hashCode
+    760:765:boolean equals(java.lang.Object) -> equals
+net.andylizi.colormotd.bungee.utils.BungeePlaceholderFiller -> net.andylizi.colormotd.bungee.utils.new:
+    net.andylizi.colormotd.bungee.BungeeConfig config -> new
+    32:34:void <init>(net.andylizi.colormotd.bungee.BungeeConfig) -> <init>
+    38:44:java.lang.Object randomIcon() -> new
+    50:54:java.lang.String fill(java.lang.String,java.lang.String) -> new
+    58:58:java.lang.String fill(java.lang.String,java.lang.String,net.md_5.bungee.api.config.ListenerInfo) -> new
+net.andylizi.colormotd.utils.AttributionUtil -> net.andylizi.colormotd.utils.new:
+    java.util.Map attributionTemp -> new
+    org.json.simple.parser.JSONParser paser -> new
+    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer attributionServer -> new
+    30:219:void <init>() -> <init>
+    49:72:java.lang.String getResult(java.lang.String) -> new
+    76:84:java.lang.String formatLocation(java.lang.String) -> I1IIIIIIII
+    90:98:java.lang.String formatISP(java.lang.String) -> II1IIIIIII
+    189:216:java.lang.String sendGet(java.lang.String,java.lang.String,java.lang.String) -> I1IIIIIIII
+    30:30:java.lang.String access$000(java.lang.String,java.lang.String,java.lang.String) -> new
+    30:30:org.json.simple.parser.JSONParser access$100() -> new
+    32:46:void <clinit>() -> <clinit>
+net.andylizi.colormotd.utils.AttributionUtil$1 -> net.andylizi.colormotd.utils.new$1:
+    37:37:void <init>() -> <init>
+    40:44:void run() -> run
+net.andylizi.colormotd.utils.AttributionUtil$2 -> net.andylizi.colormotd.utils.new$2:
+    int[] $SwitchMap$net$andylizi$colormotd$utils$AttributionUtil$AttributionServer -> new
+    58:58:void <clinit>() -> <clinit>
+net.andylizi.colormotd.utils.AttributionUtil$AttributionServer -> net.andylizi.colormotd.utils.new$new:
+    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer TAOBAO -> new
+    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer IP138 -> I1IIIIIIII
+    net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] $VALUES -> new
+    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] values() -> new
+    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer valueOf(java.lang.String) -> new
+    219:219:void <init>(java.lang.String,int) -> <init>
+    224:229:java.lang.String list() -> new
+    219:221:void <clinit>() -> <clinit>
+net.andylizi.colormotd.utils.AttributionUtil$IP138 -> net.andylizi.colormotd.utils.new$abstract:
+    java.lang.String URL -> new
+    103:103:void <init>() -> <init>
+    108:114:java.lang.String getResult(java.lang.String) -> new
+    119:130:java.lang.String formatLocation(java.lang.String) -> I1IIIIIIII
+    134:138:java.lang.String formatISP(java.lang.String) -> II1IIIIIII
+net.andylizi.colormotd.utils.AttributionUtil$TAOBAO -> net.andylizi.colormotd.utils.new$class:
+    java.lang.String URL -> new
+    142:142:void <init>() -> <init>
+    147:151:java.lang.String getResult(java.lang.String) -> new
+    157:171:java.lang.String formatLocation(java.lang.String) -> I1IIIIIIII
+    177:182:java.lang.String formatISP(java.lang.String) -> II1IIIIIII
+net.andylizi.colormotd.utils.BasePlaceholderFiller -> net.andylizi.colormotd.utils.abstract:
+    net.andylizi.colormotd.Config config -> new
+    java.text.SimpleDateFormat DATE_FORMAT -> new
+    java.text.SimpleDateFormat TIME_FORMAT -> I1IIIIIIII
+    java.lang.String date -> new
+    java.lang.String time -> I1IIIIIIII
+    java.util.Random random -> new
+    31:41:void <init>(net.andylizi.colormotd.Config) -> <init>
+    java.lang.Object randomIcon() -> new
+    46:53:java.lang.String randomMotd(java.util.List) -> new
+    57:60:java.lang.String getDate() -> new
+    64:67:java.lang.String getTime() -> I1IIIIIIII
+    71:86:java.lang.String fill(java.lang.String,java.lang.String) -> new
+    90:93:void reflushTime() -> new
+net.andylizi.colormotd.utils.StateFormater -> net.andylizi.colormotd.utils.class:
+    javax.script.ScriptEngineManager manager -> new
+    java.lang.String js -> new
     32:33:void <init>(java.io.File) -> <init>
-    34:40:void <init>(java.io.BufferedReader) -> <init>
-    43:51:java.lang.String format(double) -> Èù
-net.andylizi.colormotd.utils.UpdaterInjection -> net.andylizi.colormotd.utils.Ë¥:
-    23:65:void <init>() -> <init>
-    26:34:void inject(org.bukkit.plugin.Plugin) -> Èù
-    39:62:java.lang.Class injectDefaultUpdater(org.bukkit.plugin.Plugin) -> Íß
-net.andylizi.colormotd.utils.UpdaterInjection$v3_4 -> net.andylizi.colormotd.utils.Ë¥$Èù:
-    65:65:void <init>() -> <init>
-    67:77:void injectStaticUpdater(java.lang.Class) -> Íß
-    65:65:void access$000(java.lang.Class) -> Èù
-net.andylizi.colormotd.utils.VariableFiller -> net.andylizi.colormotd.utils.Èö:
-    java.text.SimpleDateFormat DATE_FORMAT -> Èù
-    java.text.SimpleDateFormat TIME_FORMAT -> Íß
-    java.lang.String date -> ÈÄ
-    java.lang.String time -> Í≤
-    int online -> Ëü
-    45:52:void <init>() -> <init>
-    61:72:com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage randomIcon(java.util.List) -> Èù
-    77:84:java.lang.String randomMotd(java.util.List) -> Íß
-    88:91:java.lang.String getDate() -> Èù
-    95:98:java.lang.String getTime() -> Íß
-    102:157:java.lang.String replace(java.lang.String,java.lang.String) -> Èù
-    162:164:void run() -> run
-    39:58:void <clinit>() -> <clinit>
-net.andylizi.colormotd.utils.VariableFiller$1 -> net.andylizi.colormotd.utils.Èö$1:
-    net.andylizi.colormotd.utils.VariableFiller this$0 -> Èù
-    46:46:void <init>(net.andylizi.colormotd.utils.VariableFiller) -> <init>
-    49:50:void run() -> run
+    35:42:void <init>(java.io.BufferedReader) -> <init>
+    45:53:java.lang.String format(double) -> new
+org.json.simple.ItemList -> org.json.simple.ItemList:
+    java.lang.String sp -> new
+    java.util.List items -> new
+    18:22:void <init>() -> <init>
+    18:27:void <init>(java.lang.String) -> <init>
+    18:32:void <init>(java.lang.String,java.lang.String) -> <init>
+    18:36:void <init>(java.lang.String,java.lang.String,boolean) -> <init>
+    39:39:java.util.List getItems() -> new
+    43:43:java.lang.String[] getArray() -> new
+    47:58:void split(java.lang.String,java.lang.String,java.util.List,boolean) -> new
+    61:74:void split(java.lang.String,java.lang.String,java.util.List) -> new
+    77:78:void setSP(java.lang.String) -> new
+    81:84:void add(int,java.lang.String) -> new
+    87:90:void add(java.lang.String) -> I1IIIIIIII
+    93:94:void addAll(org.json.simple.ItemList) -> new
+    97:98:void addAll(java.lang.String) -> II1IIIIIII
+    101:102:void addAll(java.lang.String,java.lang.String) -> new
+    105:106:void addAll(java.lang.String,java.lang.String,boolean) -> new
+    113:113:java.lang.String get(int) -> new
+    117:117:int size() -> new
+    121:121:java.lang.String toString() -> toString
+    125:135:java.lang.String toString(java.lang.String) -> new
+    140:141:void clear() -> new
+    144:146:void reset() -> I1IIIIIIII
+org.json.simple.JSONArray -> org.json.simple.JSONArray:
+    long serialVersionUID -> new
+    26:27:void <init>() -> <init>
+    36:37:void <init>(java.util.Collection) -> <init>
+    49:73:void writeJSONString(java.util.Collection,java.io.Writer) -> new
+    76:77:void writeJSONString(java.io.Writer) -> new
+    89:96:java.lang.String toJSONString(java.util.Collection) -> new
+    101:116:void writeJSONString(byte[],java.io.Writer) -> new
+    119:126:java.lang.String toJSONString(byte[]) -> new
+    131:146:void writeJSONString(short[],java.io.Writer) -> new
+    149:156:java.lang.String toJSONString(short[]) -> new
+    161:176:void writeJSONString(int[],java.io.Writer) -> new
+    179:186:java.lang.String toJSONString(int[]) -> new
+    191:206:void writeJSONString(long[],java.io.Writer) -> new
+    209:216:java.lang.String toJSONString(long[]) -> new
+    221:236:void writeJSONString(float[],java.io.Writer) -> new
+    239:246:java.lang.String toJSONString(float[]) -> new
+    251:266:void writeJSONString(double[],java.io.Writer) -> new
+    269:276:java.lang.String toJSONString(double[]) -> new
+    281:296:void writeJSONString(boolean[],java.io.Writer) -> new
+    299:306:java.lang.String toJSONString(boolean[]) -> new
+    311:326:void writeJSONString(char[],java.io.Writer) -> new
+    329:336:java.lang.String toJSONString(char[]) -> new
+    341:356:void writeJSONString(java.lang.Object[],java.io.Writer) -> new
+    359:366:java.lang.String toJSONString(java.lang.Object[]) -> new
+    371:371:java.lang.String toJSONString() -> new
+    379:379:java.lang.String toString() -> toString
+org.json.simple.JSONAware -> org.json.simple.JSONAware:
+    java.lang.String toJSONString() -> new
+org.json.simple.JSONObject -> org.json.simple.JSONObject:
+    long serialVersionUID -> new
+    25:26:void <init>() -> <init>
+    35:36:void <init>(java.util.Map) -> <init>
+    49:71:void writeJSONString(java.util.Map,java.io.Writer) -> new
+    74:75:void writeJSONString(java.io.Writer) -> new
+    88:95:java.lang.String toJSONString(java.util.Map) -> new
+    100:100:java.lang.String toJSONString() -> new
+    104:104:java.lang.String toString() -> toString
+    108:118:java.lang.String toString(java.lang.String,java.lang.Object) -> new
+    132:132:java.lang.String escape(java.lang.String) -> new
+org.json.simple.JSONStreamAware -> org.json.simple.JSONStreamAware:
+    void writeJSONString(java.io.Writer) -> new
+org.json.simple.JSONValue -> org.json.simple.JSONValue:
+    23:23:void <init>() -> <init>
+    46:50:java.lang.Object parse(java.io.Reader) -> new
+    75:76:java.lang.Object parse(java.lang.String) -> new
+    97:98:java.lang.Object parseWithException(java.io.Reader) -> I1IIIIIIII
+    102:103:java.lang.Object parseWithException(java.lang.String) -> I1IIIIIIII
+    121:225:void writeJSONString(java.lang.Object,java.io.Writer) -> new
+    242:249:java.lang.String toJSONString(java.lang.Object) -> new
+    259:263:java.lang.String escape(java.lang.String) -> new
+    271:314:void escape(java.lang.String,java.lang.StringBuffer) -> new
+org.json.simple.parser.ContainerFactory -> org.json.simple.parser.ContainerFactory:
+    java.util.Map createObjectContainer() -> new
+    java.util.List creatArrayContainer() -> new
+org.json.simple.parser.ContentHandler -> org.json.simple.parser.ContentHandler:
+    void startJSON() -> new
+    void endJSON() -> I1IIIIIIII
+    boolean startObject() -> new
+    boolean endObject() -> I1IIIIIIII
+    boolean startObjectEntry(java.lang.String) -> new
+    boolean endObjectEntry() -> II1IIIIIII
+    boolean startArray() -> III1IIIIII
+    boolean endArray() -> IIII1IIIII
+    boolean primitive(java.lang.Object) -> new
+org.json.simple.parser.JSONParser -> org.json.simple.parser.JSONParser:
+    int S_INIT -> new
+    int S_IN_FINISHED_VALUE -> I1IIIIIIII
+    int S_IN_OBJECT -> II1IIIIIII
+    int S_IN_ARRAY -> III1IIIIII
+    int S_PASSED_PAIR_KEY -> IIII1IIIII
+    int S_IN_PAIR_VALUE -> IIIII1IIII
+    int S_END -> IIIIII1III
+    int S_IN_ERROR -> IIIIIII1II
+    java.util.LinkedList handlerStatusStack -> new
+    org.json.simple.parser.Yylex lexer -> new
+    org.json.simple.parser.Yytoken token -> new
+    int status -> IIIIIIII1I
+    22:35:void <init>() -> <init>
+    38:41:int peekStatus(java.util.LinkedList) -> new
+    50:53:void reset() -> new
+    63:65:void reset(java.io.Reader) -> new
+    71:71:int getPosition() -> new
+    75:75:java.lang.Object parse(java.lang.String) -> new
+    79:86:java.lang.Object parse(java.lang.String,org.json.simple.parser.ContainerFactory) -> new
+    92:92:java.lang.Object parse(java.io.Reader) -> new
+    109:263:java.lang.Object parse(java.io.Reader,org.json.simple.parser.ContainerFactory) -> new
+    268:271:void nextToken() -> I1IIIIIIII
+    274:280:java.util.Map createObjectContainer(org.json.simple.parser.ContainerFactory) -> new
+    284:290:java.util.List createArrayContainer(org.json.simple.parser.ContainerFactory) -> new
+    294:295:void parse(java.lang.String,org.json.simple.parser.ContentHandler) -> new
+    298:308:void parse(java.lang.String,org.json.simple.parser.ContentHandler,boolean) -> new
+    311:312:void parse(java.io.Reader,org.json.simple.parser.ContentHandler) -> new
+    330:510:void parse(java.io.Reader,org.json.simple.parser.ContentHandler,boolean) -> new
+org.json.simple.parser.ParseException -> org.json.simple.parser.ParseException:
+    long serialVersionUID -> new
+    int ERROR_UNEXPECTED_CHAR -> new
+    int ERROR_UNEXPECTED_TOKEN -> I1IIIIIIII
+    int ERROR_UNEXPECTED_EXCEPTION -> II1IIIIIII
+    int errorType -> III1IIIIII
+    java.lang.Object unexpectedObject -> new
+    int position -> IIII1IIIII
+    21:22:void <init>(int) -> <init>
+    25:26:void <init>(int,java.lang.Object) -> <init>
+    28:32:void <init>(int,int,java.lang.Object) -> <init>
+    35:35:int getErrorType() -> new
+    39:40:void setErrorType(int) -> new
+    49:49:int getPosition() -> I1IIIIIIII
+    53:54:void setPosition(int) -> I1IIIIIIII
+    65:65:java.lang.Object getUnexpectedObject() -> new
+    69:70:void setUnexpectedObject(java.lang.Object) -> new
+    73:93:java.lang.String getMessage() -> getMessage
+org.json.simple.parser.Yylex -> org.json.simple.parser.Yylex:
+    int YYEOF -> new
+    int ZZ_BUFFERSIZE -> III1IIIIII
+    int YYINITIAL -> I1IIIIIIII
+    int STRING_BEGIN -> II1IIIIIII
+    int[] ZZ_LEXSTATE -> new
+    java.lang.String ZZ_CMAP_PACKED -> new
+    char[] ZZ_CMAP -> new
+    int[] ZZ_ACTION -> I1IIIIIIII
+    java.lang.String ZZ_ACTION_PACKED_0 -> I1IIIIIIII
+    int[] ZZ_ROWMAP -> II1IIIIIII
+    java.lang.String ZZ_ROWMAP_PACKED_0 -> II1IIIIIII
+    int[] ZZ_TRANS -> III1IIIIII
+    int ZZ_UNKNOWN_ERROR -> IIII1IIIII
+    int ZZ_NO_MATCH -> IIIII1IIII
+    int ZZ_PUSHBACK_2BIG -> IIIIII1III
+    java.lang.String[] ZZ_ERROR_MSG -> new
+    int[] ZZ_ATTRIBUTE -> IIII1IIIII
+    java.lang.String ZZ_ATTRIBUTE_PACKED_0 -> III1IIIIII
+    java.io.Reader zzReader -> new
+    int zzState -> IIIIIII1II
+    int zzLexicalState -> IIIIIIII1I
+    char[] zzBuffer -> I1IIIIIIII
+    int zzMarkedPos -> IlIIIIIIII
+    int zzCurrentPos -> IIlIIIIIII
+    int zzStartRead -> IIIlIIIIII
+    int zzEndRead -> IIIIlIIIII
+    int yyline -> IIIIIlIIII
+    int yychar -> IIIIIIlIII
+    int yycolumn -> IIIIIIIlII
+    boolean zzAtBOL -> new
+    boolean zzAtEOF -> I1IIIIIIII
+    java.lang.StringBuffer sb -> new
+    59:62:int[] zzUnpackAction() -> new
+    66:77:int zzUnpackAction(java.lang.String,int,int[]) -> new
+    94:97:int[] zzUnpackRowMap() -> I1IIIIIIII
+    101:110:int zzUnpackRowMap(java.lang.String,int,int[]) -> I1IIIIIIII
+    209:212:int[] zzUnpackAttribute() -> II1IIIIIII
+    216:227:int zzUnpackAttribute(java.lang.String,int,int[]) -> II1IIIIIII
+    302:302:int getPosition() -> new
+    243:313:void <init>(java.io.Reader) -> <init>
+    322:323:void <init>(java.io.InputStream) -> <init>
+    332:343:char[] zzUnpackCMap(java.lang.String) -> new
+    356:396:boolean zzRefill() -> new
+    403:410:void yyclose() -> new
+    423:430:void yyreset(java.io.Reader) -> new
+    436:436:int yystate() -> I1IIIIIIII
+    445:446:void yybegin(int) -> new
+    452:452:java.lang.String yytext() -> new
+    466:466:char yycharat(int) -> new
+    473:473:int yylength() -> II1IIIIIII
+    492:497:void zzScanError(int) -> II1IIIIIII
+    509:513:void yypushback(int) -> I1IIIIIIII
+    530:729:org.json.simple.parser.Yytoken yylex() -> new
+    27:201:void <clinit>() -> <clinit>
+org.json.simple.parser.Yytoken -> org.json.simple.parser.Yytoken:
+    int TYPE_VALUE -> new
+    int TYPE_LEFT_BRACE -> I1IIIIIIII
+    int TYPE_RIGHT_BRACE -> II1IIIIIII
+    int TYPE_LEFT_SQUARE -> III1IIIIII
+    int TYPE_RIGHT_SQUARE -> IIII1IIIII
+    int TYPE_COMMA -> IIIII1IIII
+    int TYPE_COLON -> IIIIII1III
+    int TYPE_EOF -> IIIIIII1II
+    int type -> IIIIIIII1I
+    java.lang.Object value -> new
+    20:26:void <init>(int,java.lang.Object) -> <init>
+    29:56:java.lang.String toString() -> toString

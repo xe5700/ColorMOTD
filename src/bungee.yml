@@ -1,0 +1,5 @@
+name: ColorMOTD
+main: net.andylizi.colormotd.bungee.BungeeMain
+version: 1.5
+author: andylizi
+description: "[Chinglish]Give your server a Gaodashang 's MOTD~"

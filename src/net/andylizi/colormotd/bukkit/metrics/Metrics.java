@@ -25,26 +25,40 @@
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
-package net.andylizi.colormotd.metrics;
+package net.andylizi.colormotd.bukkit.metrics;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.io.*;
-
-import java.net.*;
-
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
-import net.andylizi.colormotd.Main;
 
-import net.andylizi.colormotd.utils.ReflectFactory;
-
-public final class MetricsLite extends TimerTask {
+public class Metrics {
 
     /**
      * The current revision number
@@ -64,12 +78,17 @@ public final class MetricsLite extends TimerTask {
     /**
      * Interval of time to ping (in minutes)
      */
-    private final static int PING_INTERVAL = 10;
+    private static final int PING_INTERVAL = 10;
 
     /**
      * The plugin this metrics submits for
      */
     private final Plugin plugin;
+
+    /**
+     * All of the custom graphs to submit to metrics
+     */
+    private final Set<Graph> graphs = new CopyOnWriteArraySet<>();
 
     /**
      * The plugin configuration file
@@ -97,18 +116,11 @@ public final class MetricsLite extends TimerTask {
     private final Object optOutLock = new Object();
 
     /**
-     * Id of the scheduled timer
+     * The scheduled task
      */
-    private static volatile Timer timer = null;
+    private volatile BukkitTask task = null;
 
-    // New data as of R6
-    private static final String osname = System.getProperty("os.name");
-    private static final String osarch = System.getProperty("os.arch").equals("amd64") ? "x86_64" : System.getProperty("os.arch");
-    private static final String osversion = System.getProperty("os.version");
-    private static final String java_version = System.getProperty("java.version");
-    private static final int coreCount = Runtime.getRuntime().availableProcessors();
-
-    public MetricsLite(Plugin plugin) throws IOException {
+    public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
@@ -136,10 +148,44 @@ public final class MetricsLite extends TimerTask {
     }
 
     /**
-     * Start measuring statistics. This will immediately create an async
-     * repeating timer as the plugin and send the initial data to the metrics
-     * backend, and then after that it will post in increments of PING_INTERVAL
-     * 1200 ticks.
+     * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics
+     * website. Plotters can be added to the graph object returned.
+     *
+     * @param name The name of the graph
+     * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
+     */
+    public Graph createGraph(final String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Graph name cannot be null");
+        }
+
+        // Construct the graph object
+        final Graph graph = new Graph(name);
+
+        // Now we can add our graph
+        graphs.add(graph);
+
+        // and return back
+        return graph;
+    }
+
+    /**
+     * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend
+     *
+     * @param graph The name of the graph
+     */
+    public void addGraph(final Graph graph) {
+        if (graph == null) {
+            throw new IllegalArgumentException("Graph cannot be null");
+        }
+
+        graphs.add(graph);
+    }
+
+    /**
+     * Start measuring statistics. This will immediately create an async repeating task as the plugin and send the
+     * initial data to the metrics backend, and then after that it will post in increments of PING_INTERVAL * 1200
+     * ticks.
      *
      * @return True if statistics measuring is running, otherwise false.
      */
@@ -151,46 +197,48 @@ public final class MetricsLite extends TimerTask {
             }
 
             // Is metrics already running?
-            if (timer != null) {
+            if (task != null) {
                 return true;
             }
 
-            long t = PING_INTERVAL * 60L * 1000L;
-
             // Begin hitting the server with glorious data
-            timer = new Timer(plugin.getName() + "Metrics", true);
-            timer.scheduleAtFixedRate(this, Main.taskSync(t), t);
+            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+
+                private boolean firstPost = true;
+
+                @Override
+                public void run() {
+                    try {
+                        // This has to be synchronized or it can collide with the disable method.
+                        synchronized (optOutLock) {
+                            // Disable Task, if it is running and the server owner decided to opt-out
+                            if (isOptOut() && task != null) {
+                                task.cancel();
+                                task = null;
+                                // Tell all plotters to stop gathering information.
+                                for (Graph graph : graphs) {
+                                    graph.onOptOut();
+                                }
+                            }
+                        }
+
+                        // We use the inverse of firstPost because if it is the first time we are posting,
+                        // it is not a interval ping, so it evaluates to FALSE
+                        // Each time thereafter it will evaluate to TRUE, i.e PING!
+                        postPlugin(!firstPost);
+
+                        // After the first post we set firstPost to false
+                        // Each post thereafter will be a ping
+                        firstPost = false;
+                    } catch (IOException e) {
+                        if (debug) {
+                            Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+                        }
+                    }
+                }
+            }, 0, PING_INTERVAL * 1200);
 
             return true;
-        }
-    }
-
-    private boolean firstPost = true;
-
-    @Override
-    public void run() {
-        try {
-            // This has to be synchronized or it can collide with the disable method.
-            synchronized (optOutLock) {
-                // Disable Task, if it is running and the server owner decided to opt-out
-                if (isOptOut() && timer != null) {
-                    timer.cancel();
-                    timer = null;
-                }
-            }
-
-            // We use the inverse of firstPost because if it is the first time we are posting,
-            // it is not a interval ping, so it evaluates to FALSE
-            // Each time thereafter it will evaluate to TRUE, i.e PING!
-            postPlugin(!firstPost);
-
-            // After the first post we set firstPost to false
-            // Each post thereafter will be a ping
-            firstPost = false;
-        } catch (IOException e) {
-            if (debug) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", e.getMessage());
-            }
         }
     }
 
@@ -206,7 +254,7 @@ public final class MetricsLite extends TimerTask {
                 configuration.load(getConfigFile());
             } catch (IOException | InvalidConfigurationException ex) {
                 if (debug) {
-                    Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", ex.getMessage());
+                    Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
                 }
                 return true;
             }
@@ -215,13 +263,12 @@ public final class MetricsLite extends TimerTask {
     }
 
     /**
-     * Enables metrics for the server by setting "opt-out" to false in the
-     * config file and starting the metrics timer.
+     * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
      *
      * @throws java.io.IOException
      */
     public void enable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the timer.
+        // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
             if (isOptOut()) {
@@ -230,20 +277,19 @@ public final class MetricsLite extends TimerTask {
             }
 
             // Enable Task, if it is not running
-            if (timer == null) {
+            if (task == null) {
                 start();
             }
         }
     }
 
     /**
-     * Disables metrics for the server by setting "opt-out" to true in the
-     * config file and canceling the metrics timer.
+     * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
      *
      * @throws java.io.IOException
      */
     public void disable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the timer.
+        // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
             if (!isOptOut()) {
@@ -252,16 +298,15 @@ public final class MetricsLite extends TimerTask {
             }
 
             // Disable Task, if it is running
-            if (timer != null) {
-                timer.cancel();
-                timer = null;
+            if (task != null) {
+                task.cancel();
+                task = null;
             }
         }
     }
 
     /**
-     * Gets the File object of the config file that should be used to store data
-     * such as the GUID and opt-out status
+     * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
      *
      * @return the File object for the config file
      */
@@ -276,20 +321,39 @@ public final class MetricsLite extends TimerTask {
         // return => base/plugins/PluginMetrics/config.yml
         return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
     }
-
+    
     /**
      * Gets the online player (backwards compatibility)
-     *
+     * 
      * @return online player amount
      */
-    public int getOnlinePlayers() {
-        return ReflectFactory.getPlayers().length;
+    private static Method onlinePlayerMethod;
+    private static boolean onlinePlayerVersion;
+    private int getOnlinePlayers() {
+        try {
+            if(onlinePlayerMethod == null){
+                onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
+                onlinePlayerMethod.setAccessible(true);
+                onlinePlayerVersion = onlinePlayerMethod.getReturnType().equals(Collection.class);
+            }
+            if(onlinePlayerVersion) {
+                return ((Collection<?>) onlinePlayerMethod.invoke(Bukkit.getServer())).size();
+            } else {
+                return ((Player[]) onlinePlayerMethod.invoke(Bukkit.getServer())).length;
+            }
+        } catch (Exception ex) {
+            if (debug) {
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+            }
+        }
+        
+        return 0;
     }
 
     /**
      * Generic method that posts a plugin to the metrics website
      */
-    private void postPlugin(boolean isPing) throws IOException {
+    private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
         PluginDescriptionFile description = plugin.getDescription();
         String pluginName = description.getName();
@@ -299,6 +363,7 @@ public final class MetricsLite extends TimerTask {
         int playersOnline = this.getOnlinePlayers();
 
         // END server software specific section -- all code below does not use any code outside of this class / Java
+
         // Construct the post data
         StringBuilder json = new StringBuilder(1024);
         json.append('{');
@@ -308,6 +373,18 @@ public final class MetricsLite extends TimerTask {
         appendJSONPair(json, "plugin_version", pluginVersion);
         appendJSONPair(json, "server_version", serverVersion);
         appendJSONPair(json, "players_online", Integer.toString(playersOnline));
+
+        // New data as of R6
+        String osname = System.getProperty("os.name");
+        String osarch = System.getProperty("os.arch");
+        String osversion = System.getProperty("os.version");
+        String java_version = System.getProperty("java.version");
+        int coreCount = Runtime.getRuntime().availableProcessors();
+
+        // normalize os arch .. amd64 -> x86_64
+        if (osarch.equals("amd64")) {
+            osarch = "x86_64";
+        }
 
         appendJSONPair(json, "osname", osname);
         appendJSONPair(json, "osarch", osarch);
@@ -319,6 +396,46 @@ public final class MetricsLite extends TimerTask {
         // If we're pinging, append it
         if (isPing) {
             appendJSONPair(json, "ping", "1");
+        }
+
+        if (graphs.size() > 0) {
+            synchronized (graphs) {
+                json.append(',');
+                json.append('"');
+                json.append("graphs");
+                json.append('"');
+                json.append(':');
+                json.append('{');
+
+                boolean firstGraph = true;
+
+                final Iterator<Graph> iter = graphs.iterator();
+
+                while (iter.hasNext()) {
+                    Graph graph = iter.next();
+
+                    StringBuilder graphJson = new StringBuilder();
+                    graphJson.append('{');
+
+                    for (Plotter plotter : graph.getPlotters()) {
+                        appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
+                    }
+
+                    graphJson.append('}');
+
+                    if (!firstGraph) {
+                        json.append(',');
+                    }
+
+                    json.append(escapeJSON(graph.getName()));
+                    json.append(':');
+                    json.append(graphJson);
+
+                    firstGraph = false;
+                }
+
+                json.append('}');
+            }
         }
 
         // close json
@@ -338,6 +455,8 @@ public final class MetricsLite extends TimerTask {
             connection = url.openConnection();
         }
 
+
+        byte[] uncompressed = json.toString().getBytes();
         byte[] compressed = gzip(json.toString());
 
         // Headers
@@ -351,14 +470,13 @@ public final class MetricsLite extends TimerTask {
         connection.setDoOutput(true);
 
         if (debug) {
-            System.out.println("[Metrics] Prepared request for " + pluginName + " uncompressed= compressed=" + compressed.length);
+            System.out.println("[Metrics] Prepared request for " + pluginName + " uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
         }
 
         final BufferedReader reader;
         String response;
-        try ( // Write the data
-                OutputStream os = connection.getOutputStream()) {
-            os.write(compressed);
+        try (OutputStream os = connection.getOutputStream()) {
+            os.write(compressed); // Write the data
             os.flush();
             // Now read the response
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -375,6 +493,21 @@ public final class MetricsLite extends TimerTask {
             }
 
             throw new IOException(response);
+        } else {
+            // Is this the first update this hour?
+            if (response.equals("1") || response.contains("This is your first update this hour")) {
+                synchronized (graphs) {
+                    final Iterator<Graph> iter = graphs.iterator();
+
+                    while (iter.hasNext()) {
+                        final Graph graph = iter.next();
+
+                        for (Plotter plotter : graph.getPlotters()) {
+                            plotter.reset();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -394,11 +527,9 @@ public final class MetricsLite extends TimerTask {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (gzos != null) {
-                try {
-                    gzos.close();
-                } catch (IOException ignore) {
-                }
+            if (gzos != null) try {
+                gzos.close();
+            } catch (IOException ignore) {
             }
         }
 
@@ -406,8 +537,7 @@ public final class MetricsLite extends TimerTask {
     }
 
     /**
-     * Check if mineshafter is present. If it is, we need to bypass it to send
-     * POST requests
+     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
      *
      * @return true if mineshafter is installed on the server
      */
@@ -510,19 +640,146 @@ public final class MetricsLite extends TimerTask {
         return URLEncoder.encode(text, "UTF-8");
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        if(timer != null){
-            timer.cancel();
-            timer = null;
+    /**
+     * Represents a custom graph on the website
+     */
+    public static class Graph {
+
+        /**
+         * The graph's name, alphanumeric and spaces only :) If it does not comply to the above when submitted, it is
+         * rejected
+         */
+        private final String name;
+
+        /**
+         * The set of plotters that are contained within this graph
+         */
+        private final Set<Plotter> plotters = new LinkedHashSet<>();
+
+        private Graph(final String name) {
+            this.name = name;
         }
-        super.finalize();
+
+        /**
+         * Gets the graph's name
+         *
+         * @return the Graph's name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Add a plotter to the graph, which will be used to plot entries
+         *
+         * @param plotter the plotter to add to the graph
+         */
+        public void addPlotter(final Plotter plotter) {
+            plotters.add(plotter);
+        }
+
+        /**
+         * Remove a plotter from the graph
+         *
+         * @param plotter the plotter to remove from the graph
+         */
+        public void removePlotter(final Plotter plotter) {
+            plotters.remove(plotter);
+        }
+
+        /**
+         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
+         *
+         * @return an unmodifiable {@link java.util.Set} of the plotter objects
+         */
+        public Set<Plotter> getPlotters() {
+            return Collections.unmodifiableSet(plotters);
+        }
+
+        @Override
+        public int hashCode() {
+            return name.hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Graph)) {
+                return false;
+            }
+
+            final Graph graph = (Graph) object;
+            return graph.name.equals(name);
+        }
+
+        /**
+         * Called when the server owner decides to opt-out of BukkitMetrics while the server is running.
+         */
+        protected void onOptOut() {
+        }
     }
-    
-    public static void stopAll(){
-        if(timer != null){
-            timer.cancel();
-            timer = null;
+
+    /**
+     * Interface used to collect custom data for a plugin
+     */
+    public static abstract class Plotter {
+
+        /**
+         * The plot's name
+         */
+        private final String name;
+
+        /**
+         * Construct a plotter with the default plot name
+         */
+        public Plotter() {
+            this("Default");
+        }
+
+        /**
+         * Construct a plotter with a specific plot name
+         *
+         * @param name the name of the plotter to use, which will show up on the website
+         */
+        public Plotter(final String name) {
+            this.name = name;
+        }
+
+        /**
+         * Get the current value for the plotted point. Since this function defers to an external function it may or may
+         * not return immediately thus cannot be guaranteed to be thread friendly or safe. This function can be called
+         * from any thread so care should be taken when accessing resources that need to be synchronized.
+         *
+         * @return the current value for the point to be plotted.
+         */
+        public abstract int getValue();
+
+        /**
+         * Get the column name for the plotted point
+         *
+         * @return the plotted point's column name
+         */
+        public String getColumnName() {
+            return name;
+        }
+
+        /**
+         * Called after the website graphs have been updated
+         */
+        public void reset() {}
+
+        @Override
+        public int hashCode() {
+            return getColumnName().hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Plotter)) {
+                return false;
+            }
+
+            final Plotter plotter = (Plotter) object;
+            return plotter.name.equals(name) && plotter.getValue() == getValue();
         }
     }
 }

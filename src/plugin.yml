@@ -1,9 +1,9 @@
 name: ColorMOTD
-main: net.andylizi.colormotd.Main
-version: 1.3.9
+main: net.andylizi.colormotd.bukkit.BukkitMain
+version: 1.5
+author: andylizi
 depend: [ProtocolLib]
 softdepend: [Essentials]
-author: andylizi
 prefix: ColorMOTD
 description: "[Chinglish]Give your server a Gaodashang 's MOTD~"
 website: http://www.mcbbs.net/thread-448326-1-1.html

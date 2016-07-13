@@ -15,63 +15,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.listener;
+package net.andylizi.colormotd.bukkit.listener;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
-
 import com.comphenix.protocol.events.ListenerOptions;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.ListeningWhitelist;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
-
 import com.comphenix.protocol.injector.GamePhase;
-
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
+import com.comphenix.protocol.wrappers.WrappedServerPing.CompressedImage;
 import com.google.common.collect.ImmutableList;
 
 import java.util.*;
 import java.util.logging.Level;
+import java.nio.charset.StandardCharsets;
 
-import net.andylizi.colormotd.Main;
-import static net.andylizi.colormotd.Main.*;
-import static net.andylizi.colormotd.utils.VariableFiller.*;
-import net.andylizi.colormotd.utils.ReflectFactory;
+import net.andylizi.colormotd.bukkit.BukkitMain;
+import net.andylizi.colormotd.utils.BasePlaceholderFiller;
+import static net.andylizi.colormotd.bukkit.utils.ReflectFactory.getPingPacketType;
+import static net.andylizi.colormotd.bukkit.utils.ReflectFactory.getServerInfoPacketType;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class MOTDPacketListener extends Object implements PacketListener {
-
-    private Main plugin;
+    private BukkitMain plugin;
+    private BasePlaceholderFiller placeholderFiller;
     private ProtocolManager pm;
 
     private final ListeningWhitelist receivingWhitelist;
     private final ListeningWhitelist sendingWhitelist;
+    private final PacketType PACKET_SERVER_INFO;
+    
+    public static volatile int requestCounter;
 
-    public MOTDPacketListener(Main plugin, ProtocolManager pm) throws Throwable {
+    public MOTDPacketListener(final BukkitMain plugin, BasePlaceholderFiller placeholderFiller, ProtocolManager pm) throws Exception {
         this.plugin = plugin;
+        this.placeholderFiller = placeholderFiller;
         this.pm = pm;
 
+        this.PACKET_SERVER_INFO = getServerInfoPacketType();
         this.sendingWhitelist = ListeningWhitelist.newBuilder()
-                .priority(ListenerPriority.NORMAL)
-                .types(PacketType.Status.Server.OUT_SERVER_INFO)  //监听PacketStatusOutServerInfo包
+                .priority(ListenerPriority.HIGH)
+                .types(PACKET_SERVER_INFO)  //监听PacketStatusOutServerInfo包
                 .gamePhase(GamePhase.LOGIN)
                 .options(new ListenerOptions[]{ListenerOptions.ASYNC})
                 .build();
         this.receivingWhitelist = ListeningWhitelist.newBuilder()
-                .priority(ListenerPriority.NORMAL)
-                .types(PacketType.Status.Client.IN_PING) //监听PacketStatusInPing包
+                .priority(ListenerPriority.HIGH)
+                .types(getPingPacketType()) //监听PacketStatusInPing包
                 .gamePhase(GamePhase.LOGIN)
                 .options(new ListenerOptions[]{ListenerOptions.ASYNC})
                 .build();
+        
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                plugin.colormotd.placeholderFiller.reflushTime();
+                if(++i % 60 == 0){
+                    requestCounter = i = 0;
+                }
+            }
+        }.runTaskTimerAsynchronously(plugin, 20L, 20L);
     }
 
     @Override
     public synchronized void onPacketSending(PacketEvent event) {
-        final String ip = event.getPlayer().getAddress().toString().split(":")[0].replace("/", "");
-        if (event.getPacketType().equals(PacketType.Status.Server.OUT_SERVER_INFO)) {
+        final String ip = event.getPlayer().getAddress().getHostString();
+        if (event.getPacketType().equals(PACKET_SERVER_INFO)) {
             try {
                 WrappedServerPing ping = null;
 
@@ -81,26 +97,25 @@ public final class MOTDPacketListener extends Object implements PacketListener {
                     return;
                 }
 
-                ping.setMotD(replace(randomMotd(config.motdList), ip));
-                ping.setFavicon(randomIcon(config.icon));
-                if (!config.showDelay) {
+                ping.setMotD(placeholderFiller.fill(placeholderFiller.randomMotd(plugin.config.motdList), ip));
+                ping.setFavicon((CompressedImage) placeholderFiller.randomIcon());
+                if (!plugin.config.showDelay) {
                     ping.setVersionProtocol(-1);
-                    ping.setVersionName(replace(config.online, ip));
+                    ping.setVersionName(placeholderFiller.fill(plugin.config.online, ip));
                 }
-                if (!config.playerList.isEmpty()) {
+                if (!plugin.config.playerList.isEmpty()) {
                     List<WrappedGameProfile> profileList = new ArrayList<>();
-                    for (String str : config.playerList) {
-                        str = replace(str, ip);
-                        profileList.add(ReflectFactory.createGameProfile(str));
+                    for (String str : plugin.config.playerList) {
+                        profileList.add(createGameProfile(placeholderFiller.fill(str, ip)));
                     }
                     ping.setPlayers(ImmutableList.copyOf(profileList));
                     ping.setPlayersVisible(true);
-                } else {
-                    ping.setPlayersVisible(false);
                 }
                 event.getPacket().getServerPings().getValues().set(0, ping);
+                requestCounter++;
             } catch (Throwable e) {
-                logger.log(Level.SEVERE, "[{0}]在向客户端发送ping包时出现严重错误!ProtocolLib版本{1}", new Object[]{Main.getInstance().getDescription().getVersion(), protocolLibVersion});
+                plugin.logger.log(Level.SEVERE, "[{0}]在向客户端发送ping包时出现严重错误!ProtocolLib版本{1}", 
+                        new Object[]{plugin.getDescription().getVersion(), plugin.protocolLibVersion});
                 e.printStackTrace();
             }
         }
@@ -108,7 +123,7 @@ public final class MOTDPacketListener extends Object implements PacketListener {
 
     @Override
     public void onPacketReceiving(PacketEvent event) {
-        if (!config.showDelay) {
+        if (!plugin.config.showDelay) {
             event.setCancelled(true);
             return;
         }
@@ -131,5 +146,9 @@ public final class MOTDPacketListener extends Object implements PacketListener {
 
     public void unRegister(Plugin plugin) {
         pm.removePacketListeners(plugin);
+    }
+    
+    public static WrappedGameProfile createGameProfile(String name) throws Throwable {
+        return new WrappedGameProfile(UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8)), name);
     }
 }

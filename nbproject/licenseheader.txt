@@ -1,7 +1,6 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}ColorMOTD 
 ${licensePrefix}Copyright (C) ${date?date?string("yyyy")} andylizi
 ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}This program is free software: you can redistribute it and/or modify

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.utils;
+package net.andylizi.colormotd.bukkit.utils;
 
 import java.lang.reflect.Method;
-import static net.andylizi.colormotd.Main.logger;
+import static net.andylizi.colormotd.bukkit.BukkitMain.logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -31,27 +31,20 @@ public final class FakePlayersOnlineHook extends Object{
         if(hookPlugin == null || getOnlinePlayers == null || getMaxPlayers == null){
             hookPlugin = Bukkit.getPluginManager().getPlugin("FakePlayersOnline");
             if(hookPlugin == null){
-                try{
-                    return false;
-                }finally{
-                    throw new UnsupportedOperationException("找不到FakePlayersOnline插件!");
-                }
+                throw new UnsupportedOperationException("找不到FakePlayersOnline插件!");
             }
             try {
                 getOnlinePlayers = hookPlugin.getClass().getMethod("getPlayersOnline");
                 getMaxPlayers = hookPlugin.getClass().getMethod("getMaxPlayers");
             } catch (NoSuchMethodException ex) {
-                try{
-                    return false;
-                }finally{
-                    throw new UnsupportedOperationException("无法与FakePlayersOnline插件建立连接!");
-                }
+                throw new UnsupportedOperationException("无法与FakePlayersOnline插件建立连接!");
             }
             return true;
         }else{
             return true;
         }
     }
+    
     public int getOnlinePlayers(){
         try {
             return (int) getOnlinePlayers.invoke(hookPlugin);
@@ -61,6 +54,7 @@ public final class FakePlayersOnlineHook extends Object{
             return 0;
         }
     }
+    
     public int getMaxPlayers(){
         try {
             return (int) getMaxPlayers.invoke(hookPlugin);

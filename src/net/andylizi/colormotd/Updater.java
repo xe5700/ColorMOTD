@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.updater;
+package net.andylizi.colormotd;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -34,37 +34,37 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.TimerTask;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import net.andylizi.colormotd.ColorMOTD;
 
-import net.andylizi.colormotd.Main;
-import static net.andylizi.colormotd.Main.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public final class Updater extends TimerTask {
-
-    private final String fileName;
+    public static final boolean DEBUG = false;
+    public static final int UPDATER_VERSION = 1;
+    private static final String UPDATE_URL = "http://vcheck.windit.net/mc_plugin/andylizi/colormotd/update.json";
+    
+    private final ColorMOTD colormotd;
+    private final File file;
+    private final Logger logger;
+    private final String userAgent;
+    
     private String etag = null;
     public NewVersion newVersion;
-    public BukkitTask countdown;
     public Throwable exception;
-    public static final boolean DEBUG = false;
-    private static final int UPDATER_VERSION = 1;
-    private static final String UPDATE_URL = "http://vcheck.windit.net/mc_plugin/andylizi/colormotd/update.json";
-    private static String USER_AGENT;
 
-    public Updater(String fileName) {
-        this.fileName = fileName;
-        USER_AGENT = plugin.getDescription().getFullName() + "/" + Bukkit.getPort() + "/Updater/" + UPDATER_VERSION;
+    public Updater(ColorMOTD colormotd, Logger logger, File file, String userAgent) {
+        this.colormotd = colormotd;
+        this.logger = logger;
+        this.file = file;
+        this.userAgent = userAgent;
     }
 
     private boolean checkUpdate() {
-        if (new File(Bukkit.getUpdateFolderFile(), fileName).exists()) {
+        if (file != null && file.exists()) {
             cancel();
         }
         URL url;
@@ -80,7 +80,7 @@ public final class Updater extends TimerTask {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setUseCaches(false);
             conn.setRequestMethod("GET");
-            conn.addRequestProperty("User-Agent", USER_AGENT);
+            conn.addRequestProperty("User-Agent", userAgent);
             if (etag != null) {
                 conn.addRequestProperty("If-None-Match", etag);
             }
@@ -125,7 +125,7 @@ public final class Updater extends TimerTask {
             try {
                 JSONObject jsonObj = (JSONObject) new JSONParser().parse(builder.toString());
                 int build = ((Number) jsonObj.get("build")).intValue();
-                if (build <= buildVersion) {
+                if (build <= ColorMOTD.buildVersion) {
                     return false;
                 }
                 String version = (String) jsonObj.get("version");
@@ -154,28 +154,16 @@ public final class Updater extends TimerTask {
     @Override
     public void run() {
         newVersion = null;
-        if (!Main.getInstance().isEnabled()) {
-            cancel();
-            return;
-        }
         if (!checkUpdate()) {
             return;
         }
-        Main.broadcast("§b*************************************************"
+        colormotd.broadcast("§b********************************************"
                 + "\n§a§lColorMOTD有新版本啦!现在最新的版本是:§6§l§o" + newVersion.version
                 + "\n§6更新日志:§r"
-                + "\n" + ChatColor.translateAlternateColorCodes('&', newVersion.msg)
-                + "\n§b*************************************************"
-                + "\n§c<警告>将在30秒后自动开始下载更新!"
-                + "\n§c如果不想下载请在30秒内输入§o§5/colormotd stopupdate§c!");
-        //cancel();
-        countdown = new BukkitRunnable() {
-            @Override
-            public void run() {
-                broadcast("§e开始自动下载ColorMOTD " + newVersion.version + "...");
-                newVersion.download();
-            }
-        }.runTaskLaterAsynchronously(plugin, 30L * 20L);
+                + "\n" + newVersion.msg.replace('&', '§')
+                + "\n§b***********************************************"
+                + "\n§c提示> 因为MCBBS插件版新规定, 现在不能给你自动下载最新版本了, 请一定一定一定要去原帖手动更新!"
+                + "\n§b§l原帖的地址是: §a"+ColorMOTD.MCBBS_RELEASE_URL);
     }
 
     public final class NewVersion implements Cloneable, Serializable {
@@ -194,12 +182,18 @@ public final class Updater extends TimerTask {
             this.download_url = download_url;
         }
 
+        /**
+         * @deprecated 为什么MCBBS不让自动下载更新...
+         */
+        @Deprecated
         public void download() {
+            if(file == null)
+                return;
             URL url;
             try {
                 url = new URL(download_url);
             } catch (MalformedURLException ex) {
-                broadcast("§4自动更新下载失败,下载链接格式错误: §r" + ex.toString());
+                colormotd.broadcast("§4自动更新下载失败,下载链接格式错误: §r" + ex.toString());
                 ex.printStackTrace();
                 return;
             }
@@ -207,7 +201,7 @@ public final class Updater extends TimerTask {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setUseCaches(false);
                 conn.setRequestMethod("GET");
-                conn.addRequestProperty("User-Agent", USER_AGENT);
+                conn.addRequestProperty("User-Agent", userAgent);
                 conn.addRequestProperty("Accept", "application/java-archive,application/octet-stream,*/*;");
                 conn.addRequestProperty("Accept-Encoding", "gzip");
                 conn.addRequestProperty("Cache-Control", "no-cache");
@@ -228,10 +222,9 @@ public final class Updater extends TimerTask {
                 } else {
                     input = new BufferedInputStream(conn.getInputStream(), (size == -1 ? 10240 : size));
                 }
-                File file = new File(Bukkit.getUpdateFolderFile(), fileName);
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-                broadcast("§e连接成功,总大小 " + (size == -1 ? "未知" : size) + "bytes ,开始下载...");
+                colormotd.broadcast("§e连接成功,总大小 " + (size == -1 ? "未知" : size) + "bytes ,开始下载...");
                 try (FileOutputStream output = new FileOutputStream(file, false)) {
                     byte[] buffer = new byte[1024];
                     while (input.read(buffer) != -1) {
@@ -239,9 +232,9 @@ public final class Updater extends TimerTask {
                     }
                 }
                 input.close();
-                broadcast("§a自动更新完成,将在下次重启服务器后生效");
+                colormotd.broadcast("§a自动更新完成,将在下次重启服务器后生效");
             } catch (IOException ex) {
-                broadcast("§4自动更新下载失败: 下载时出错: §r§o" + ex.toString());
+                colormotd.broadcast("§4自动更新下载失败: 下载时出错: §r§o" + ex.toString());
                 ex.printStackTrace();
                 return;
             }

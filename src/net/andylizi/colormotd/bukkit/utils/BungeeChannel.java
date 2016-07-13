@@ -15,12 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.utils;
+package net.andylizi.colormotd.bukkit.utils;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -28,14 +24,22 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.logging.Level;
-import net.andylizi.colormotd.Main;
+
+import net.andylizi.colormotd.bukkit.BukkitMain;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public final class BungeeChannel extends BukkitRunnable implements PluginMessageListener {
-
     private static BungeeChannel instance;
-    public static int online = 0;
     private static boolean state = false;
+    private static byte[] askAllMsg;
+    public static int online = 0;
+    
+    private Plugin plugin;
 
     public BungeeChannel(Plugin plugin) {
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
@@ -44,6 +48,7 @@ public final class BungeeChannel extends BukkitRunnable implements PluginMessage
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "RedisBungee", this);
         runTaskTimer(plugin, 3 * 20L, 3 * 20L);
         instance = this;
+        this.plugin = plugin;
     }
 
     public static BungeeChannel getInstance() {
@@ -67,24 +72,27 @@ public final class BungeeChannel extends BukkitRunnable implements PluginMessage
             }
         } catch (EOFException e) {
         } catch (IOException e) {
-            Main.logger.log(Level.SEVERE, "在试图接收Bungee在线人数过程中出现错误:");
+            BukkitMain.logger.log(Level.SEVERE, "在试图接收Bungee在线人数过程中出现错误:");
             e.printStackTrace();
         }
     }
 
-    public synchronized void askPlayerCount(String server) {
+    public void askPlayerCount() {
         Player[] players = ReflectFactory.getPlayers();
         if (players.length > 0) {
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            DataOutputStream out = new DataOutputStream(b);
-            try {
-                out.writeUTF("PlayerCount");
-                out.writeUTF(server);
-            } catch (IOException e) {
-                Main.logger.log(Level.SEVERE, "在试图获取Bungee在线人数过程中出现错误:");
-                e.printStackTrace();
+            if(askAllMsg == null){
+                ByteArrayOutputStream b = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(b);
+                try {
+                    out.writeUTF("PlayerCount");
+                    out.writeUTF("ALL");
+                } catch (IOException e) {
+                    BukkitMain.logger.log(Level.SEVERE, "你肯定是中奖了");
+                    e.printStackTrace();
+                }
+                askAllMsg = b.toByteArray();
             }
-            players[0].sendPluginMessage(Main.getInstance(), Main.config.useRedisBungee ? "RedisBungee" : "BungeeCord", b.toByteArray());
+            players[0].sendPluginMessage(plugin, BukkitMain.config.useRedisBungee ? "RedisBungee" : "BungeeCord", askAllMsg);
         } else {
             if (state) {
                 online = 0;
@@ -95,6 +103,6 @@ public final class BungeeChannel extends BukkitRunnable implements PluginMessage
 
     @Override
     public void run() {
-        askPlayerCount("ALL");
+        askPlayerCount();
     }
 }

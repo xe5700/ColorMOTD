@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.listener;
+package net.andylizi.colormotd.bukkit.listener;
 
-import net.andylizi.colormotd.Main;
+import net.andylizi.colormotd.bukkit.BukkitMain;
+
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,11 +27,11 @@ import org.bukkit.event.player.PlayerLoginEvent;
 public final class JoinListener extends Object implements org.bukkit.event.Listener{
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerLoginEvent e){
-        if(Main.smode){
-            if(e.getPlayer().isOp()||e.getPlayer().hasPermission("colormotd.smode.join")){
+        if(BukkitMain.config.smode){
+            if(e.getPlayer().isOp() || e.getPlayer().hasPermission("colormotd.smode.join")){
                 e.allow();
             }else{
-                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, ChatColor.translateAlternateColorCodes('&', Main.config.smodeKickCause));
+                e.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, ChatColor.translateAlternateColorCodes('&', BukkitMain.config.smodeKickCause));
             }
         }
     }

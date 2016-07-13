@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.utils;
+package net.andylizi.colormotd.bukkit.utils;
 
 import java.lang.reflect.Method;
 import net.ess3.api.IEssentials;

@@ -15,56 +15,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd;
+package net.andylizi.colormotd.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.utility.MinecraftVersion;
 
 import java.io.*;
-
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.andylizi.colormotd.utils.*;
-
-import net.andylizi.colormotd.listener.JoinListener;
-
-import net.andylizi.colormotd.metrics.MetricsLite;
-
-import net.andylizi.colormotd.listener.MOTDPacketListener;
-import net.andylizi.colormotd.commands.CommandHandler;
-import net.andylizi.colormotd.updater.Updater;
+import net.andylizi.colormotd.ColorMOTD;
+import net.andylizi.colormotd.Updater;
+import net.andylizi.colormotd.bukkit.listener.JoinListener;
+import net.andylizi.colormotd.bukkit.listener.MOTDPacketListener;
+import net.andylizi.colormotd.bukkit.metrics.Metrics;
+import net.andylizi.colormotd.bukkit.metrics.Metrics.Graph;
+import net.andylizi.colormotd.bukkit.metrics.Metrics.Plotter;
+import net.andylizi.colormotd.bukkit.utils.BungeeChannel;
+import net.andylizi.colormotd.bukkit.utils.EssentialsHook;
+import net.andylizi.colormotd.bukkit.utils.FakePlayersOnlineHook;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class Main extends JavaPlugin implements Plugin {
-
-    public static Main plugin;
+public final class BukkitMain extends JavaPlugin implements Plugin {
+    public static ColorMOTD colormotd;
+    public static BukkitMain plugin;
     public static Logger logger;
-    public static final int buildVersion = 20;
 
     protected static ProtocolManager pm;
-    public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
-    public static Config config;
+    public static BukkitConfig config;
 
     public static String protocolLibVersion;
-    public static StateFormater stateFormater;
-    public static Updater updater;
     public static EssentialsHook essHook;
     public static FakePlayersOnlineHook fakePlayersOnlineHook;
-
-    public static boolean smode = false;
 
     public static boolean essentials;
     public static boolean fakePlayersOnline;
 
-    public Main() throws AssertionError {
+    public BukkitMain() throws AssertionError {
         for (StackTraceElement t : Thread.currentThread().getStackTrace()) {
             if (t.getClassName().equals("org.bukkit.plugin.java.PluginClassLoader")) {
                 plugin = this;//单例
@@ -74,9 +67,6 @@ public final class Main extends JavaPlugin implements Plugin {
         throw new AssertionError("此类无法被实例化");
     }
 
-    /**
-     * 入口方法
-     */
     @Override
     public void onEnable() {
         long startTime = System.currentTimeMillis();
@@ -91,39 +81,22 @@ public final class Main extends JavaPlugin implements Plugin {
             pm = ProtocolLibrary.getProtocolManager();
             MinecraftVersion version = pm.getMinecraftVersion();
             if (version.compareTo(MinecraftVersion.WORLD_UPDATE) < 0) {
-                severe("此插件最低只能在1.7.2 (World Update)服务器上运行!");
+                colormotd.severe("此插件最低只能在1.7.2 (World Update)服务器上运行!");
             }
         } else {
-            severe("无法连接到ProtocolLib\n\t\t请确认您是否安装了ProtocolLib插件作为前置?");
+            colormotd.severe("无法连接到ProtocolLib\n\t\t请确认您是否安装了ProtocolLib插件作为前置?");
             return;
-        }
-
-        try {
-            UpdaterInjection.inject(protocolLib);
-        } catch (Throwable ex) {
-            //Ignore
         }
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
 
-        //添加MOTD监听器
-        try {
-            logger.info("├正在注册MOTD监听器...");
-            pm.addPacketListener(new MOTDPacketListener(this, pm));
-        } catch (Error e) {
-            severe("在试图注册监听器过程中出现严重错误,此插件可能不支持服务器上的ProtocolLib版本(" + protocolLibVersion + ")!");
-            e.printStackTrace();
-        } catch (Throwable e) {
-            severe("在注册监听器过程中出现严重错误!ProtocolLib版本" + protocolLibVersion);
-            e.printStackTrace();
-        }
-
         //加载配置文件
         try {
-            config = new Config(getDataFolder());
+            config = new BukkitConfig(getLogger(), getDataFolder());
             config.loadConfig();
             logger.info("│├载入成功");
-        } catch (Throwable ex) {
+            colormotd = new BukkitColorMOTD(this, config);
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "│├在加载配置文件过程中发生严重错误,请检查你的配置文件!!!");
             ex.printStackTrace();
             config.configLoadFailed();
@@ -131,16 +104,24 @@ public final class Main extends JavaPlugin implements Plugin {
 
         //启动MetricsLite
         try {
-            new MetricsLite(this).start();
-        } catch (Throwable t) {
-            logger.log(Level.WARNING, "├启动MetricsLite失败: {0}", t.toString());
+            Metrics metrics = new Metrics(this);
+            Graph graph = metrics.createGraph("RequestCount");
+            graph.addPlotter(new Plotter("Request Count") {
+                @Override
+                public int getValue() {
+                    return MOTDPacketListener.requestCounter;
+                }
+            });
+            metrics.addGraph(graph);
+            metrics.start();
+        } catch (Exception t) {
+            logger.log(Level.WARNING, "├启动Metrics失败: {0}", t);
         }
 
         essentials = (Bukkit.getPluginManager().getPlugin("Essentials") != null);
         fakePlayersOnline = (Bukkit.getPluginManager().getPlugin("FakePlayersOnline") != null);
-        if (essentials || fakePlayersOnline) {
+        if (essentials || fakePlayersOnline) 
             logger.info("│├软前置加载...");
-        }
         if (essentials) {
             try {
                 essHook = new EssentialsHook();
@@ -164,11 +145,15 @@ public final class Main extends JavaPlugin implements Plugin {
             }
         }
 
-        //自动更新器
-        if (config.autoUpdate) {
-            new Timer("ColorMOTDUpdater", true).scheduleAtFixedRate((updater = new Updater(getFile().getName())), taskSync(10L * 1000L), 60L * 60L * 1000L);
+        //更新提示
+        if (config.updateChecker) {
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this,
+                    colormotd.updater = new Updater(colormotd, getLogger(), 
+                            new File(Bukkit.getUpdateFolderFile(), getFile().getName()), 
+                    getDescription().getFullName() + "/" + Bukkit.getPort() + "/Updater/" + Updater.UPDATER_VERSION), 
+                    ColorMOTD.taskSync(10L * 1000L) / 50L, 60L * 60L * 20L);
         } else {
-            logger.info("├您在配置文件里禁止了自动更新,那记得经常去发布贴检查有没有新版本哦~");
+            logger.info("├您在配置文件里禁止了更新提示,那记得经常去发布贴检查有没有新版本哦~");
         }
 
         //BungeeCord/RedisBungee
@@ -177,11 +162,23 @@ public final class Main extends JavaPlugin implements Plugin {
                 logger.log(Level.INFO, "├尝试建立与Bungee的连接...");
                 new BungeeChannel(this);
             }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             logger.log(Level.SEVERE, "│├连接Bungee失败!无法获取Bungee服务器真实在线人数");
             t.printStackTrace();
             config.useBungeeCord = config.useRedisBungee = false;
         } finally {
+            //添加MOTD监听器
+            try {
+                logger.info("├正在注册MOTD监听器...");
+                pm.addPacketListener(new MOTDPacketListener(this, colormotd.placeholderFiller, pm));
+            } catch (Error e) {
+                colormotd.severe("在试图注册监听器过程中出现严重错误,此插件可能不支持服务器上的ProtocolLib版本(" + protocolLibVersion + ")!");
+                e.printStackTrace();
+            } catch (Exception e) {
+                colormotd.severe("在注册监听器过程中出现严重错误!ProtocolLib版本" + protocolLibVersion);
+                e.printStackTrace();
+            }
+
             //注册命令
             CommandHandler commandExecutor = new CommandHandler(this);
             Bukkit.getPluginCommand("cmotdr").setExecutor(commandExecutor);
@@ -190,15 +187,13 @@ public final class Main extends JavaPlugin implements Plugin {
             System.out.println(this.getDescription().getFullName() + "加载完成,用时" + (System.currentTimeMillis() - startTime) + "毫秒");
         }
 
-        //关闭已知MOTD插件列表中的所有插件
+        //关闭已知MOTD插件列表中的所有冲突插件
         new BukkitRunnable() {
             @Override
             public void run() {
                 for (String str : "ServerlistMOTD,PlayerCountMessage,MOTDColor,YuleMotd,AnimMOTD,SexyMotd,UniqueMOTD,InGameMotd,MultiMOTD,PPMOTD,ServerMotdManager,BetterMOTD,PowerMOTD".split(",")) {
                     Plugin p = Bukkit.getPluginManager().getPlugin(str);
-                    if (p == null) {
-                        continue;
-                    }
+                    if (p == null) continue;
                     Bukkit.getPluginManager().disablePlugin(p);
                 }
             }
@@ -217,83 +212,23 @@ public final class Main extends JavaPlugin implements Plugin {
         }
     }
 
-    public static void severe(String msg) {
-        System.err.println("**********************************************");
-        System.err.println("\t");
-        System.err.println(msg);
-        System.err.println("\t");
-        System.err.println("**********************************************");
-        if (plugin != null) {
-            if (plugin.getLogger() != null) {
-                plugin.getLogger().severe("插件将停止运行");
-            } else {
-                System.err.println("[ColorMOTD] 插件将停止运行");
-            }
-            if (plugin.isEnabled()) {
-                Bukkit.getPluginManager().disablePlugin(plugin);
-            }
-        }
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
-    }
-
-    public static Main getInstance() {
-        return plugin;
-    }
-
     @Override
     public void onDisable() {
         try {
             //清空归属地缓存
             AttributionUtil.attributionTemp.clear();
-        } catch (Throwable ex) {
-            //ignore
-        }
+        } catch (Exception ex) {}
 
         try {
-            //停止MetricsLite
-            MetricsLite.stopAll();
-        } catch (Throwable ex) {
-            //ignore
-        }
-
-        try {
-            if (updater != null) {
-                updater.cancel();
-                updater = null;
-            }
-        } catch (Throwable ex) {
-            //ignore
-        }
+            if(colormotd != null)
+                if (colormotd.updater != null) {
+                    colormotd.updater.cancel();
+                    colormotd.updater = null;
+                }
+        } catch (Exception ex) {}
 
         try {
             pm.removePacketListeners(this);
-        } catch (Throwable ex) {
-            //ignore
-        }
-    }
-
-    public static void broadcast(String msg) {
-        String[] msgs = (msg.startsWith("\n") ? msg : msgPrefix + msg).replace("\n", "\n" + msgPrefix).split("\n");
-        Bukkit.getConsoleSender().sendMessage(msgs);
-        for (CommandSender sender : ReflectFactory.getPlayers()) {
-            if (sender.isOp() || sender.hasPermission("colormotd.update.warning")) {
-                sender.sendMessage(msgs);
-            }
-        }
-    }
-
-    public static Date taskSync(long interval) {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.ENGLISH);
-        final long t = interval;
-        long curTime = cal.getTimeInMillis();
-        long d = curTime / t;
-        while (curTime % t != 0) {
-            curTime = t * ++d;
-            cal.setTimeInMillis(curTime);
-        }
-        return cal.getTime();
+        } catch (Exception ex) {}
     }
 }

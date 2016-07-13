@@ -15,25 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.andylizi.colormotd.utils;
+package net.andylizi.colormotd.bukkit.utils;
 
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
+import com.comphenix.protocol.PacketType;
 import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 public final class ReflectFactory extends Object {
-    public static WrappedGameProfile createGameProfile(String name) throws Throwable {
-        //use ProtocolLib
-        return new WrappedGameProfile(UUID.nameUUIDFromBytes(name.getBytes("UTF-8")), name);
-    }
-
     public static Player[] getPlayers() {
         try {
             Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
@@ -48,5 +42,37 @@ public final class ReflectFactory extends Object {
             ex.printStackTrace();
         }
         return new Player[0];
+    }
+    
+    public static PacketType getServerInfoPacketType() throws NoSuchFieldException{
+        try{
+            Field f = PacketType.Status.Server.class.getField("OUT_SERVER_INFO");
+            f.setAccessible(true);
+            return (PacketType) f.get(null);
+        }catch(ReflectiveOperationException ex){
+            try{
+                Field f = PacketType.Status.Server.class.getField("SERVER_INFO");
+                f.setAccessible(true);
+                return (PacketType) f.get(null);
+            }catch(ReflectiveOperationException ex2){
+                throw new NoSuchFieldException("不支持的ProtocolLib版本");
+            }
+        }
+    }
+    
+    public static PacketType getPingPacketType() throws NoSuchFieldException{
+        try{
+            Field f = PacketType.Status.Client.class.getField("IN_PING");
+            f.setAccessible(true);
+            return (PacketType) f.get(null);
+        }catch(ReflectiveOperationException ex){
+            try{
+                Field f = PacketType.Status.Client.class.getField("PING");
+                f.setAccessible(true);
+                return (PacketType) f.get(null);
+            }catch(ReflectiveOperationException ex2){
+                throw new NoSuchFieldException("不支持的ProtocolLib版本");
+            }
+        }
     }
 }

@@ -31,11 +31,13 @@ public final class StateFormater extends Object{
     public StateFormater(File file) throws IOException{
         this(new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8")));
     }
+    
     public StateFormater(BufferedReader js) throws IOException {
         StringBuilder sb = new StringBuilder();
         String buffer = null;
         while((buffer = js.readLine()) != null) sb.append(buffer).append("\n");
         this.js = sb.toString();
+        js.close();
         if(manager == null) manager = new ScriptEngineManager();
     }
 
