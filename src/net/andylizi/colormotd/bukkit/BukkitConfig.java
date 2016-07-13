@@ -91,7 +91,8 @@ public class BukkitConfig extends Config{
             try {
                 AttributionUtil.attributionServer = AttributionUtil.AttributionServer.valueOf(config.getString("AttributionServer").toUpperCase());
             } catch (IllegalArgumentException ex) {
-                logger.log(Level.WARNING, "│├您指定的归属地服务器\"{0}\"不存在,请检查你的配置文件中的\"AttributionServer\"项,可用的值为: {1} 将使用默认值\"TAOBAO\"", new Object[]{config.getString("AttributionServer"), AttributionUtil.AttributionServer.list()});
+                logger.log(Level.WARNING, "│├您指定的归属地服务器\"{0}\"不存在,请检查你的配置文件中的\"AttributionServer\"项,可用的值为: {1} 将使用默认值\"TAOBAO\"", 
+                        new Object[]{config.getString("AttributionServer"), AttributionUtil.AttributionServer.list()});
                 AttributionUtil.attributionServer = AttributionUtil.AttributionServer.TAOBAO;
             }
             try {

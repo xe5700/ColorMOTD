@@ -1,6 +1,6 @@
 name: ColorMOTD
 main: net.andylizi.colormotd.bukkit.BukkitMain
-version: 1.5
+version: 1.5.1
 author: andylizi
 depend: [ProtocolLib]
 softdepend: [Essentials]

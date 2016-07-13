@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import net.andylizi.colormotd.utils.BasePlaceholderFiller;
 
 public abstract class ColorMOTD {
-    public static final int buildVersion = 26;
+    public static final int buildVersion = 27;
     public static final String msgPrefix = "§6[§aColorMOTD§6]§r ";
     public static final String MCBBS_RELEASE_URL = "http://www.mcbbs.net/thread-448326-1-1.html";
 

@@ -92,16 +92,16 @@ net.andylizi.colormotd.bukkit.BukkitConfig -> net.andylizi.colormotd.bukkit.abst
     java.util.List compressedIcon -> new
     com.comphenix.protocol.wrappers.WrappedServerPing$CompressedImage compressedSmodeIcon -> new
     48:49:void <init>(java.util.logging.Logger,java.io.File) -> <init>
-    53:123:void loadConfig() -> new
-    127:133:java.util.List loadIcons() -> new
-    138:139:void saveConfig() -> III1IIIIII
-    142:168:void reloadConfig() -> IIII1IIIII
-    172:173:void updateSmode(boolean) -> new
+    53:124:void loadConfig() -> new
+    128:134:java.util.List loadIcons() -> new
+    139:140:void saveConfig() -> III1IIIIII
+    143:169:void reloadConfig() -> IIII1IIIII
+    173:174:void updateSmode(boolean) -> new
 net.andylizi.colormotd.bukkit.BukkitConfig$1 -> net.andylizi.colormotd.bukkit.abstract$1:
     net.andylizi.colormotd.bukkit.BukkitConfig this$0 -> new
-    151:154:void <init>(net.andylizi.colormotd.bukkit.BukkitConfig) -> <init>
-    158:159:void setAllowUnicode(boolean) -> setAllowUnicode
-    163:164:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
+    152:155:void <init>(net.andylizi.colormotd.bukkit.BukkitConfig) -> <init>
+    159:160:void setAllowUnicode(boolean) -> setAllowUnicode
+    164:165:void setLineBreak(org.yaml.snakeyaml.DumperOptions$LineBreak) -> setLineBreak
 net.andylizi.colormotd.bukkit.BukkitMain -> net.andylizi.colormotd.bukkit.BukkitMain:
     net.andylizi.colormotd.ColorMOTD colormotd -> new
     net.andylizi.colormotd.bukkit.BukkitMain plugin -> new
@@ -271,11 +271,11 @@ net.andylizi.colormotd.bungee.BungeeConfig -> net.andylizi.colormotd.bungee.abst
     java.util.List favicons -> new
     net.md_5.bungee.api.Favicon faviconSmode -> new
     45:67:void <init>(java.util.logging.Logger,java.io.File) -> <init>
-    71:95:void loadConfig() -> new
-    99:105:java.util.List loadIcons() -> new
-    109:116:void reloadConfig() -> IIII1IIIII
-    120:121:void updateSmode(boolean) -> new
-    125:129:void saveConfig() -> III1IIIIII
+    71:96:void loadConfig() -> new
+    100:106:java.util.List loadIcons() -> new
+    110:117:void reloadConfig() -> IIII1IIIII
+    121:122:void updateSmode(boolean) -> new
+    126:130:void saveConfig() -> III1IIIIII
 net.andylizi.colormotd.bungee.BungeeMain -> net.andylizi.colormotd.bungee.BungeeMain:
     net.andylizi.colormotd.bungee.BungeeColorMOTD colormotd -> new
     net.andylizi.colormotd.bungee.BungeeMain plugin -> new
@@ -412,8 +412,8 @@ net.andylizi.colormotd.utils.AttributionUtil$AttributionServer -> net.andylizi.c
     net.andylizi.colormotd.utils.AttributionUtil$AttributionServer TAOBAO -> new
     net.andylizi.colormotd.utils.AttributionUtil$AttributionServer IP138 -> I1IIIIIIII
     net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] $VALUES -> new
-    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] values() -> new
-    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer valueOf(java.lang.String) -> new
+    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer[] values() -> values
+    219:219:net.andylizi.colormotd.utils.AttributionUtil$AttributionServer valueOf(java.lang.String) -> valueOf
     219:219:void <init>(java.lang.String,int) -> <init>
     224:229:java.lang.String list() -> new
     219:221:void <clinit>() -> <clinit>
@@ -456,88 +456,88 @@ org.json.simple.ItemList -> org.json.simple.ItemList:
     18:27:void <init>(java.lang.String) -> <init>
     18:32:void <init>(java.lang.String,java.lang.String) -> <init>
     18:36:void <init>(java.lang.String,java.lang.String,boolean) -> <init>
-    39:39:java.util.List getItems() -> new
-    43:43:java.lang.String[] getArray() -> new
-    47:58:void split(java.lang.String,java.lang.String,java.util.List,boolean) -> new
-    61:74:void split(java.lang.String,java.lang.String,java.util.List) -> new
-    77:78:void setSP(java.lang.String) -> new
-    81:84:void add(int,java.lang.String) -> new
-    87:90:void add(java.lang.String) -> I1IIIIIIII
-    93:94:void addAll(org.json.simple.ItemList) -> new
-    97:98:void addAll(java.lang.String) -> II1IIIIIII
-    101:102:void addAll(java.lang.String,java.lang.String) -> new
-    105:106:void addAll(java.lang.String,java.lang.String,boolean) -> new
-    113:113:java.lang.String get(int) -> new
-    117:117:int size() -> new
+    39:39:java.util.List getItems() -> getItems
+    43:43:java.lang.String[] getArray() -> getArray
+    47:58:void split(java.lang.String,java.lang.String,java.util.List,boolean) -> split
+    61:74:void split(java.lang.String,java.lang.String,java.util.List) -> split
+    77:78:void setSP(java.lang.String) -> setSP
+    81:84:void add(int,java.lang.String) -> add
+    87:90:void add(java.lang.String) -> add
+    93:94:void addAll(org.json.simple.ItemList) -> addAll
+    97:98:void addAll(java.lang.String) -> addAll
+    101:102:void addAll(java.lang.String,java.lang.String) -> addAll
+    105:106:void addAll(java.lang.String,java.lang.String,boolean) -> addAll
+    113:113:java.lang.String get(int) -> get
+    117:117:int size() -> size
     121:121:java.lang.String toString() -> toString
-    125:135:java.lang.String toString(java.lang.String) -> new
-    140:141:void clear() -> new
-    144:146:void reset() -> I1IIIIIIII
+    125:135:java.lang.String toString(java.lang.String) -> toString
+    140:141:void clear() -> clear
+    144:146:void reset() -> reset
 org.json.simple.JSONArray -> org.json.simple.JSONArray:
     long serialVersionUID -> new
     26:27:void <init>() -> <init>
     36:37:void <init>(java.util.Collection) -> <init>
-    49:73:void writeJSONString(java.util.Collection,java.io.Writer) -> new
-    76:77:void writeJSONString(java.io.Writer) -> new
-    89:96:java.lang.String toJSONString(java.util.Collection) -> new
-    101:116:void writeJSONString(byte[],java.io.Writer) -> new
-    119:126:java.lang.String toJSONString(byte[]) -> new
-    131:146:void writeJSONString(short[],java.io.Writer) -> new
-    149:156:java.lang.String toJSONString(short[]) -> new
-    161:176:void writeJSONString(int[],java.io.Writer) -> new
-    179:186:java.lang.String toJSONString(int[]) -> new
-    191:206:void writeJSONString(long[],java.io.Writer) -> new
-    209:216:java.lang.String toJSONString(long[]) -> new
-    221:236:void writeJSONString(float[],java.io.Writer) -> new
-    239:246:java.lang.String toJSONString(float[]) -> new
-    251:266:void writeJSONString(double[],java.io.Writer) -> new
-    269:276:java.lang.String toJSONString(double[]) -> new
-    281:296:void writeJSONString(boolean[],java.io.Writer) -> new
-    299:306:java.lang.String toJSONString(boolean[]) -> new
-    311:326:void writeJSONString(char[],java.io.Writer) -> new
-    329:336:java.lang.String toJSONString(char[]) -> new
-    341:356:void writeJSONString(java.lang.Object[],java.io.Writer) -> new
-    359:366:java.lang.String toJSONString(java.lang.Object[]) -> new
-    371:371:java.lang.String toJSONString() -> new
+    49:73:void writeJSONString(java.util.Collection,java.io.Writer) -> writeJSONString
+    76:77:void writeJSONString(java.io.Writer) -> writeJSONString
+    89:96:java.lang.String toJSONString(java.util.Collection) -> toJSONString
+    101:116:void writeJSONString(byte[],java.io.Writer) -> writeJSONString
+    119:126:java.lang.String toJSONString(byte[]) -> toJSONString
+    131:146:void writeJSONString(short[],java.io.Writer) -> writeJSONString
+    149:156:java.lang.String toJSONString(short[]) -> toJSONString
+    161:176:void writeJSONString(int[],java.io.Writer) -> writeJSONString
+    179:186:java.lang.String toJSONString(int[]) -> toJSONString
+    191:206:void writeJSONString(long[],java.io.Writer) -> writeJSONString
+    209:216:java.lang.String toJSONString(long[]) -> toJSONString
+    221:236:void writeJSONString(float[],java.io.Writer) -> writeJSONString
+    239:246:java.lang.String toJSONString(float[]) -> toJSONString
+    251:266:void writeJSONString(double[],java.io.Writer) -> writeJSONString
+    269:276:java.lang.String toJSONString(double[]) -> toJSONString
+    281:296:void writeJSONString(boolean[],java.io.Writer) -> writeJSONString
+    299:306:java.lang.String toJSONString(boolean[]) -> toJSONString
+    311:326:void writeJSONString(char[],java.io.Writer) -> writeJSONString
+    329:336:java.lang.String toJSONString(char[]) -> toJSONString
+    341:356:void writeJSONString(java.lang.Object[],java.io.Writer) -> writeJSONString
+    359:366:java.lang.String toJSONString(java.lang.Object[]) -> toJSONString
+    371:371:java.lang.String toJSONString() -> toJSONString
     379:379:java.lang.String toString() -> toString
 org.json.simple.JSONAware -> org.json.simple.JSONAware:
-    java.lang.String toJSONString() -> new
+    java.lang.String toJSONString() -> toJSONString
 org.json.simple.JSONObject -> org.json.simple.JSONObject:
     long serialVersionUID -> new
     25:26:void <init>() -> <init>
     35:36:void <init>(java.util.Map) -> <init>
-    49:71:void writeJSONString(java.util.Map,java.io.Writer) -> new
-    74:75:void writeJSONString(java.io.Writer) -> new
-    88:95:java.lang.String toJSONString(java.util.Map) -> new
-    100:100:java.lang.String toJSONString() -> new
+    49:71:void writeJSONString(java.util.Map,java.io.Writer) -> writeJSONString
+    74:75:void writeJSONString(java.io.Writer) -> writeJSONString
+    88:95:java.lang.String toJSONString(java.util.Map) -> toJSONString
+    100:100:java.lang.String toJSONString() -> toJSONString
     104:104:java.lang.String toString() -> toString
-    108:118:java.lang.String toString(java.lang.String,java.lang.Object) -> new
-    132:132:java.lang.String escape(java.lang.String) -> new
+    108:118:java.lang.String toString(java.lang.String,java.lang.Object) -> toString
+    132:132:java.lang.String escape(java.lang.String) -> escape
 org.json.simple.JSONStreamAware -> org.json.simple.JSONStreamAware:
-    void writeJSONString(java.io.Writer) -> new
+    void writeJSONString(java.io.Writer) -> writeJSONString
 org.json.simple.JSONValue -> org.json.simple.JSONValue:
     23:23:void <init>() -> <init>
-    46:50:java.lang.Object parse(java.io.Reader) -> new
-    75:76:java.lang.Object parse(java.lang.String) -> new
-    97:98:java.lang.Object parseWithException(java.io.Reader) -> I1IIIIIIII
-    102:103:java.lang.Object parseWithException(java.lang.String) -> I1IIIIIIII
-    121:225:void writeJSONString(java.lang.Object,java.io.Writer) -> new
-    242:249:java.lang.String toJSONString(java.lang.Object) -> new
-    259:263:java.lang.String escape(java.lang.String) -> new
-    271:314:void escape(java.lang.String,java.lang.StringBuffer) -> new
+    46:50:java.lang.Object parse(java.io.Reader) -> parse
+    75:76:java.lang.Object parse(java.lang.String) -> parse
+    97:98:java.lang.Object parseWithException(java.io.Reader) -> parseWithException
+    102:103:java.lang.Object parseWithException(java.lang.String) -> parseWithException
+    121:225:void writeJSONString(java.lang.Object,java.io.Writer) -> writeJSONString
+    242:249:java.lang.String toJSONString(java.lang.Object) -> toJSONString
+    259:263:java.lang.String escape(java.lang.String) -> escape
+    271:314:void escape(java.lang.String,java.lang.StringBuffer) -> escape
 org.json.simple.parser.ContainerFactory -> org.json.simple.parser.ContainerFactory:
-    java.util.Map createObjectContainer() -> new
-    java.util.List creatArrayContainer() -> new
+    java.util.Map createObjectContainer() -> createObjectContainer
+    java.util.List creatArrayContainer() -> creatArrayContainer
 org.json.simple.parser.ContentHandler -> org.json.simple.parser.ContentHandler:
-    void startJSON() -> new
-    void endJSON() -> I1IIIIIIII
-    boolean startObject() -> new
-    boolean endObject() -> I1IIIIIIII
-    boolean startObjectEntry(java.lang.String) -> new
-    boolean endObjectEntry() -> II1IIIIIII
-    boolean startArray() -> III1IIIIII
-    boolean endArray() -> IIII1IIIII
-    boolean primitive(java.lang.Object) -> new
+    void startJSON() -> startJSON
+    void endJSON() -> endJSON
+    boolean startObject() -> startObject
+    boolean endObject() -> endObject
+    boolean startObjectEntry(java.lang.String) -> startObjectEntry
+    boolean endObjectEntry() -> endObjectEntry
+    boolean startArray() -> startArray
+    boolean endArray() -> endArray
+    boolean primitive(java.lang.Object) -> primitive
 org.json.simple.parser.JSONParser -> org.json.simple.parser.JSONParser:
     int S_INIT -> new
     int S_IN_FINISHED_VALUE -> I1IIIIIIII
@@ -552,21 +552,21 @@ org.json.simple.parser.JSONParser -> org.json.simple.parser.JSONParser:
     org.json.simple.parser.Yytoken token -> new
     int status -> IIIIIIII1I
     22:35:void <init>() -> <init>
-    38:41:int peekStatus(java.util.LinkedList) -> new
-    50:53:void reset() -> new
-    63:65:void reset(java.io.Reader) -> new
-    71:71:int getPosition() -> new
-    75:75:java.lang.Object parse(java.lang.String) -> new
-    79:86:java.lang.Object parse(java.lang.String,org.json.simple.parser.ContainerFactory) -> new
-    92:92:java.lang.Object parse(java.io.Reader) -> new
-    109:263:java.lang.Object parse(java.io.Reader,org.json.simple.parser.ContainerFactory) -> new
-    268:271:void nextToken() -> I1IIIIIIII
-    274:280:java.util.Map createObjectContainer(org.json.simple.parser.ContainerFactory) -> new
-    284:290:java.util.List createArrayContainer(org.json.simple.parser.ContainerFactory) -> new
-    294:295:void parse(java.lang.String,org.json.simple.parser.ContentHandler) -> new
-    298:308:void parse(java.lang.String,org.json.simple.parser.ContentHandler,boolean) -> new
-    311:312:void parse(java.io.Reader,org.json.simple.parser.ContentHandler) -> new
-    330:510:void parse(java.io.Reader,org.json.simple.parser.ContentHandler,boolean) -> new
+    38:41:int peekStatus(java.util.LinkedList) -> peekStatus
+    50:53:void reset() -> reset
+    63:65:void reset(java.io.Reader) -> reset
+    71:71:int getPosition() -> getPosition
+    75:75:java.lang.Object parse(java.lang.String) -> parse
+    79:86:java.lang.Object parse(java.lang.String,org.json.simple.parser.ContainerFactory) -> parse
+    92:92:java.lang.Object parse(java.io.Reader) -> parse
+    109:263:java.lang.Object parse(java.io.Reader,org.json.simple.parser.ContainerFactory) -> parse
+    268:271:void nextToken() -> nextToken
+    274:280:java.util.Map createObjectContainer(org.json.simple.parser.ContainerFactory) -> createObjectContainer
+    284:290:java.util.List createArrayContainer(org.json.simple.parser.ContainerFactory) -> createArrayContainer
+    294:295:void parse(java.lang.String,org.json.simple.parser.ContentHandler) -> parse
+    298:308:void parse(java.lang.String,org.json.simple.parser.ContentHandler,boolean) -> parse
+    311:312:void parse(java.io.Reader,org.json.simple.parser.ContentHandler) -> parse
+    330:510:void parse(java.io.Reader,org.json.simple.parser.ContentHandler,boolean) -> parse
 org.json.simple.parser.ParseException -> org.json.simple.parser.ParseException:
     long serialVersionUID -> new
     int ERROR_UNEXPECTED_CHAR -> new
@@ -578,12 +578,12 @@ org.json.simple.parser.ParseException -> org.json.simple.parser.ParseException:
     21:22:void <init>(int) -> <init>
     25:26:void <init>(int,java.lang.Object) -> <init>
     28:32:void <init>(int,int,java.lang.Object) -> <init>
-    35:35:int getErrorType() -> new
-    39:40:void setErrorType(int) -> new
-    49:49:int getPosition() -> I1IIIIIIII
-    53:54:void setPosition(int) -> I1IIIIIIII
-    65:65:java.lang.Object getUnexpectedObject() -> new
-    69:70:void setUnexpectedObject(java.lang.Object) -> new
+    35:35:int getErrorType() -> getErrorType
+    39:40:void setErrorType(int) -> setErrorType
+    49:49:int getPosition() -> getPosition
+    53:54:void setPosition(int) -> setPosition
+    65:65:java.lang.Object getUnexpectedObject() -> getUnexpectedObject
+    69:70:void setUnexpectedObject(java.lang.Object) -> setUnexpectedObject
     73:93:java.lang.String getMessage() -> getMessage
 org.json.simple.parser.Yylex -> org.json.simple.parser.Yylex:
     int YYEOF -> new
@@ -618,27 +618,27 @@ org.json.simple.parser.Yylex -> org.json.simple.parser.Yylex:
     boolean zzAtBOL -> new
     boolean zzAtEOF -> I1IIIIIIII
     java.lang.StringBuffer sb -> new
-    59:62:int[] zzUnpackAction() -> new
-    66:77:int zzUnpackAction(java.lang.String,int,int[]) -> new
-    94:97:int[] zzUnpackRowMap() -> I1IIIIIIII
-    101:110:int zzUnpackRowMap(java.lang.String,int,int[]) -> I1IIIIIIII
-    209:212:int[] zzUnpackAttribute() -> II1IIIIIII
-    216:227:int zzUnpackAttribute(java.lang.String,int,int[]) -> II1IIIIIII
-    302:302:int getPosition() -> new
+    59:62:int[] zzUnpackAction() -> zzUnpackAction
+    66:77:int zzUnpackAction(java.lang.String,int,int[]) -> zzUnpackAction
+    94:97:int[] zzUnpackRowMap() -> zzUnpackRowMap
+    101:110:int zzUnpackRowMap(java.lang.String,int,int[]) -> zzUnpackRowMap
+    209:212:int[] zzUnpackAttribute() -> zzUnpackAttribute
+    216:227:int zzUnpackAttribute(java.lang.String,int,int[]) -> zzUnpackAttribute
+    302:302:int getPosition() -> getPosition
     243:313:void <init>(java.io.Reader) -> <init>
     322:323:void <init>(java.io.InputStream) -> <init>
-    332:343:char[] zzUnpackCMap(java.lang.String) -> new
-    356:396:boolean zzRefill() -> new
-    403:410:void yyclose() -> new
-    423:430:void yyreset(java.io.Reader) -> new
-    436:436:int yystate() -> I1IIIIIIII
-    445:446:void yybegin(int) -> new
-    452:452:java.lang.String yytext() -> new
-    466:466:char yycharat(int) -> new
-    473:473:int yylength() -> II1IIIIIII
-    492:497:void zzScanError(int) -> II1IIIIIII
-    509:513:void yypushback(int) -> I1IIIIIIII
-    530:729:org.json.simple.parser.Yytoken yylex() -> new
+    332:343:char[] zzUnpackCMap(java.lang.String) -> zzUnpackCMap
+    356:396:boolean zzRefill() -> zzRefill
+    403:410:void yyclose() -> yyclose
+    423:430:void yyreset(java.io.Reader) -> yyreset
+    436:436:int yystate() -> yystate
+    445:446:void yybegin(int) -> yybegin
+    452:452:java.lang.String yytext() -> yytext
+    466:466:char yycharat(int) -> yycharat
+    473:473:int yylength() -> yylength
+    492:497:void zzScanError(int) -> zzScanError
+    509:513:void yypushback(int) -> yypushback
+    530:729:org.json.simple.parser.Yytoken yylex() -> yylex
     27:201:void <clinit>() -> <clinit>
 org.json.simple.parser.Yytoken -> org.json.simple.parser.Yytoken:
     int TYPE_VALUE -> new
